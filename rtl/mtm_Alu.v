@@ -22,15 +22,41 @@ module mtm_Alu (
     output wire sout   // serial data output
 );
 
-/*
+
+wire [31:0] A;
+wire [31:0] B;
+wire [31:0]	C;
+wire [7:0] CTL_in;
+wire [7:0] CTL_out;
+
+
 mtm_Alu_deserializer u_mtm_Alu_deserializer(
+	.clk(clk),
+	.rst(rst_n),
+	.sin(sin),
+	.A(A),
+	.B(B),
+	.CTL(CTL_in)
 );
 
 mtm_Alu_core u_mtm_Alu_core(
+	.clk(clk),
+	.rst(rst_n),
+	.sin(sin),
+	.A(A),
+	.B(B),
+	.CTL(CTL_in),
+	.C(C),
+	.CTL_out(CTL_out)
 );
 
 mtm_Alu_serializer u_mtm_Alu_serializer(
+	.clk(clk),
+	.rst(rst_n),
+	.C(C),
+	.CTL_out(CTL_out),
+	.sout(sout)
 );
-*/
+
 
 endmodule
