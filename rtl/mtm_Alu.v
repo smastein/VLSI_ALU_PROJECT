@@ -42,7 +42,7 @@ mtm_Alu_deserializer u_mtm_Alu_deserializer(
 mtm_Alu_core u_mtm_Alu_core(
 	.clk(clk),
 	.rst(rst_n),
-	.sin(sin),
+	//.sin(sin),
 	.A(A),
 	.B(B),
 	.CTL(CTL_in),
