@@ -44,25 +44,25 @@ always @(posedge clk) begin
 			case(OP)
 				AND: begin						//CTL( {1'b0, FLAGS, CRC)
 					C = A & B;					//FLAGS = { Carry, Overflow, Zero, Negative } - 4 bits of ALU flags
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,				//CRC is 3-bit CRC checksum calculated for 37 bits of { C, 1'b0, FLAGS },
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};				//CRC is 3-bit CRC checksum calculated for 37 bits of { C, 1'b0, FLAGS },
 				end							
 				OR: begin
 					C = A | B;
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				ADD: begin
 					{Carry,C} <= A+B;
 					Zero = ~(|C);
 					Overflow = ;
 					Negative = (C[31] == 1);
-					CTL_out =
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				SUB: begin
 					{Carry,C} <= A-B;
 					Zero = ~(|C);
 					Overflow = ;
 					Negative = (A < B);
-					CTL_out =
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				default: begin
 					CTL_out = 8'b10010011;
