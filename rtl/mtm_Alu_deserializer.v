@@ -72,15 +72,19 @@ always @(posedge clk) begin
 				end
 				else if(CTL_check>1) begin
 					address = ERROR;
+					CTL = 8'b10110011;
 				end
 				else if(bit_counter>10) begin
 					address = ERROR;
+					CTL = 8'b10110011;
 				end
 				else if(bit_counter=0 && sin != 0) begin
 					address = ERROR;
+					CTL = 8'b10110011;
 				end
 				else if(bit_counter = 10 && sin != 1) begin
 					address = ERROR;
+					CTL = 8'b10110011;
 				end
 				else if(bit_counter == 0 && sin == 0) begin
 					address = OPERATION;

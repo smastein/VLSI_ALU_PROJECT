@@ -53,19 +53,19 @@ always @(posedge clk) begin
 				ADD: begin
 					{Carry,C} <= A+B;
 					Zero = ~(|C);
-					Overflow = ;
+					Overflow = ({Carry,C[31]} == 2'b01);
 					Negative = (C[31] == 1);
 					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				SUB: begin
 					{Carry,C} <= A-B;
 					Zero = ~(|C);
-					Overflow = ;
+					Overflow = ({Carry,C[31]} == 2'b01);
 					Negative = (A < B);
 					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				default: begin
-					CTL_out = 8'b10010011;
+					CTL_out = 8'b11110011;
 				end
 			endcase
 		end
