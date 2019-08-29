@@ -105,7 +105,7 @@ module mtm_Alu_tb (
 			A = $urandom;
 			B = $urandom;
 			CTL = {1'b0, OP, CRC};
-			send_calculation_data();
+			send_calculation_data({B,A,CTL});
 			if(compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL)) begin
 				done = 1;
 			end
@@ -127,40 +127,40 @@ module mtm_Alu_tb (
 		B = 32'b00000000000000000000000000000000;
 		for(l=0; l<4; l = l+1) begin
 			if(l ==0) begin
-				CTL = AND;
+				OP = AND;
 			end
 			else if(l ==1) begin
-				CTL = OR;
+				OP = OR;
 			end
 			else if(l ==2) begin
-				CTL = ADD;
+				OP = ADD;
 			end
 			else if(l ==3) begin
-				CTL = SUB;
+				OP = SUB;
 			end
 			
 			//1
 			CRC = nextCRC4_D68({Bm, Am, 1'b1, OP},4'b0000);
 			CTL = {1'b0, OP, CRC};
-			send_calculation_data();
+			send_calculation_data({Bm,Am,CTL});
 			xx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,Bm,CTL)
 			
 			//2
 			CRC = nextCRC4_D68({B, A, 1'b1, OP},4'b0000);
 			CTL = {1'b0, OP, CRC};
-			send_calculation_data();
+			send_calculation_data({B,A,CTL});
 			mm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL)
 			
 			//3
 			CRC = nextCRC4_D68({B, Am, 1'b1, OP},4'b0000);
 			CTL = {1'b0, OP, CRC};
-			send_calculation_data();
+			send_calculation_data({B,Am,CTL});
 			xm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,B,CTL)
 			
 			//4
 			CRC = nextCRC4_D68({Bm, A, 1'b1, OP},4'b0000);
 			CTL = {1'b0, OP, CRC};
-			send_calculation_data();
+			send_calculation_data({Bm,A,CTL});
 			mx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,Bm,CTL)
 			
 			if(xx == mm == xm == mx == 1) begin
