@@ -65,26 +65,33 @@ always @(posedge clk) begin
 			end
 			TRANSFER: begin
 				if(packet_counter == 8) begin
-					A = packet_AB[63:32];
-					B = packet_AB[31:0];
-					CTL = packet_CTL;
-					address = END;
+					CRC = nextCRC4_D68({packet_AB[31:0],packet_AB[63:32],packet_CTL[6:4]}, 4'b0000);
+					if(CRC == packet_CTL[3:0]) begin
+						A = packet_AB[63:32];
+						B = packet_AB[31:0];
+						CTL = packet_CTL;
+						address = END;
+					end
+					else begin
+						address = ERROR;
+						CTL = 8'b10100101;
+					end
 				end
 				else if(CTL_check>1) begin
 					address = ERROR;
-					CTL = 8'b10110011;
+					CTL = 8'b11001001;
 				end
 				else if(bit_counter>10) begin
 					address = ERROR;
-					CTL = 8'b10110011;
+					CTL = 8'b11001001;
 				end
 				else if(bit_counter=0 && sin != 0) begin
 					address = ERROR;
-					CTL = 8'b10110011;
+					CTL = 8'b11001001;
 				end
 				else if(bit_counter = 10 && sin != 1) begin
 					address = ERROR;
-					CTL = 8'b10110011;
+					CTL = 8'b11001001;
 				end
 				else if(bit_counter == 0 && sin == 0) begin
 					address = OPERATION;

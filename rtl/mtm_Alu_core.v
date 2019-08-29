@@ -9,8 +9,8 @@ module mtm_Alu_core (
 ) ;
 
 // CTL( {1'b0, OP, CRC} ) 
-assign OP = CTL[6:4];
-assign CRC = CTL[3:0];
+assign OP = CTL_in[6:4];
+assign CRC = CTL_in[3:0];
 
 reg Carry,
 	Overflow, 
@@ -40,7 +40,7 @@ always @(posedge clk) begin
 		C = 0;
 	end
 	else begin
-		if(CTL[7] == 0) begin
+		if(CTL_in[7] == 0) begin
 			case(OP)
 				AND: begin						//CTL( {1'b0, FLAGS, CRC)
 					C = A & B;					//FLAGS = { Carry, Overflow, Zero, Negative } - 4 bits of ALU flags
@@ -65,9 +65,12 @@ always @(posedge clk) begin
 					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				default: begin
-					CTL_out = 8'b11110011;
+					CTL_out = 8'b10010011;
 				end
 			endcase
+		end
+		else if(CTL_in == 8'b10100101 || CTL_in == 8'b11001001) begin
+			CTL_out = CTL_in;
 		end
 		else begin
 			Carry = 0;

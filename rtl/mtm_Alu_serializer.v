@@ -42,7 +42,7 @@ always @(posedge clk) begin
 					bit_counter = 0;
 					state = FIRST_BIT;
 				end
-				else if(CTL_out[7:0] == 8'b11110011 || CTL_out[7:0] == 8'b10110011) begin
+				else if(CTL_out[7:0] == 8'b10010011 || CTL_out[7:0] == 8'b11001001 || CTL_out[7:0] == 8'b10100101) begin //wrong OP , wrong DATA, wrong crc
 					packets_dest = 1;
 					packets_avail = 0;
 					bit_counter = 0;

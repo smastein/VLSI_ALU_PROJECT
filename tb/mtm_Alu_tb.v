@@ -10,11 +10,11 @@
  * verifies if the operation result is correct.
  * 
  * The TB must include:
- * - task send_byte to send a CMD or CTL command to the ALU
- * - task send_calculation_data that will send 9 bytes to the ALU for given
+ * - task send_byte to send a CMD or CTL command to the ALU						OK
+ * - task send_calculation_data that will send 9 bytes to the ALU for given		OK
  *   operands and operation
- * - procedural block for capturing the input data from the ALU
- * - task compare to compare the result from the ALU and the expected data.
+ * - procedural block for capturing the input data from the ALU					OK
+ * - task compare to compare the result from the ALU and the expected data. 	OK
  * 
  * The test vectors must provide at least:
  * - sending max (0xFFFF) and min (0) data with all the ALU operations (AND OR, ADD,SUB)
@@ -32,12 +32,127 @@ module mtm_Alu_tb (
     output reg sout
 ) ;
 
-	integer i,j;
+	integer i,j,k, iter, count;
+	reg [31:0] 	A, 
+				B;
+	
+	reg [7:0] CTL;
+	reg [2:0] OP;
+	reg [3:0] CRC;
+	reg [1:0] done;
+	reg [54:0] 	out, 
+				out_nxt;
+	
 	localparam  AND = 3'b000,
 				OR = 3'b001,
 				ADD = 3'b100,
 				SUB = 3'b101;
 
+				
+	initial begin
+		clk = 0; 
+		i = 0; 
+		j = 0; 
+		k = 0; 
+		count = 0;
+		done =0;
+		iter = 1;
+		rst_n = 1;
+		sin = 1;
+		OP = 3'b000;
+		CRC = 4'b0000;
+		
+		$display("Send valid data with crc error");
+		A = 4;
+		B = 2;
+		CTL = 8'b00001111;
+		send_calculation_data({B,A,CTL});
+		if(out[54:47] == 8'b10100101) begin
+			$display("PASS");
+		end
+		else begin
+			$display("FAIL");
+		end
+		
+		$display("Send invalid data (wrong number of DATA packets before CTL packet)");
+		send_byte(8'b01010101,0);
+		send_byte(8'b00001111,0);
+		send_byte(8'b01010000,1);
+		if(out[54:47] == 8'b11001001) begin
+			$display("PASS");
+		end
+		else begin
+			$display("FAIL");
+		end
+	
+		$display("Send 1000 random valid data");
+		while(count <1000) begin
+			if(count%4 == 0) begin
+				OP = AND;
+			end
+			if(count%4 == 1) begin
+				OP = OR;
+			end
+			if(count%4 == 2) begin
+				OP = ADD
+			end
+			if(count%4 == 3) begin
+				OP = SUB;
+			end
+			
+			CRC = nextCRC4_D68({B, A, 1'b1, OP},4'b0000);
+			A = $urandom;
+			B = $urandom;
+			CTL = {1'b0, OP, CRC};
+			send_calculation_data();
+			if(compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL)) begin
+				done = 1;
+			end
+			else begin 
+				done = 0;
+			end
+		end
+		if(done == 1) begin
+			$display("PASS");
+		end
+		else begin
+			$display("FAIL");
+		end
+		
+		$display("Send max (0xFFFF) and min (0) data with all the ALU operations (AND OR, ADD,SUB)");
+		
+		if() begin
+			$display("PASS");
+		end
+		else begin
+			$display("FAIL");
+		end
+	end
+	
+	always @(*) begin
+		if(sout == 0 && k == 0) begin
+			iter = 55;
+			out_nxt[iter-1] = sout;
+		end
+		else if(k > 1) begin
+			iter = k - 1;
+			out_nxt[iter-1] = sout;
+		end
+		else if(k == 1) begin
+			iter = 0;
+		end
+		  
+	end
+
+	always @(posedge clk) begin
+		out = out_nxt;
+		k = iter;
+	end
+
+	always begin
+		clk =  ! clk;
+	end
+	
 	task send_byte 
 		input [7:0] data;
 		input [1:0] CMD; //=0 - Data, =1 - CTL
@@ -129,3 +244,46 @@ module mtm_Alu_tb (
 	endtask
 
 endmodule
+
+	////////////////////////////////////////////////////////////////////////////////
+// Copyright (C) 1999-2008 Easics NV.
+// This source file may be used and distributed without restriction
+// provided that this copyright statement is not removed from the file
+// and that any derivative work contains the original copyright notice
+// and the associated disclaimer.
+//
+// THIS SOURCE FILE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS
+// OR IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+// WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+//
+// Purpose : synthesizable CRC function
+//   * polynomial: x^4 + x^1 + 1
+//   * data width: 36
+//
+// Info : tools@easics.be
+//        http://www.easics.com
+////////////////////////////////////////////////////////////////////////////////
+  // polynomial: x^4 + x^1 + 1
+  // data width: 68
+  // convention: the first serial bit is D[67]
+  function [3:0] nextCRC4_D68;
+
+    input [67:0] Data;
+    input [3:0] crc;
+    reg [67:0] d;
+    reg [3:0] c;
+    reg [3:0] newcrc;
+  begin
+    d = Data;
+    c = crc;
+
+    newcrc[0] = d[60] ^ d[56] ^ d[55] ^ d[54] ^ d[53] ^ d[51] ^ d[49] ^ d[48] ^ d[45] ^ d[41] ^ d[40] ^ d[39] ^ d[38] ^ d[36] ^ d[33] ^ d[32] ^ d[31] ^ d[30] ^ d[26] ^ d[25] ^ d[24] ^ d[23] ^ d[21] ^ d[19] ^ d[18] ^ d[15] ^ d[11] ^ d[10] ^ d[9] ^ d[8] ^ d[6] ^ d[4] ^ d[3] ^ d[0] ^ c[0] ^ c[2];
+    newcrc[1] = d[60] ^ d[57] ^ d[53] ^ d[52] ^ d[51] ^ d[50] ^ d[48] ^ d[46] ^ d[45] ^ d[42] ^ d[38] ^ d[37] ^ d[36] ^ d[34] ^ d[30] ^ d[29] ^ d[27] ^ d[23] ^ d[22] ^ d[21] ^ d[20] ^ d[18] ^ d[16] ^ d[15] ^ d[12] ^ d[8] ^ d[7] ^ d[6] ^ d[5] ^ d[3] ^ d[1] ^ d[0] ^ c[1] ^ c[2] ^ c[3];
+    newcrc[2] = d[58] ^ d[54] ^ d[53] ^ d[52] ^ d[51] ^ d[49] ^ d[47] ^ d[46] ^ d[43] ^ d[39] ^ d[38] ^ d[37] ^ d[36] ^ d[35] ^ d[31] ^ d[30] ^ d[29] ^ d[28] ^ d[24] ^ d[23] ^ d[22] ^ d[21] ^ d[19] ^ d[17] ^ d[16] ^ d[13] ^ d[9] ^ d[8] ^ d[7] ^ d[6] ^ d[4] ^ d[2] ^ d[1] ^ c[0] ^ c[2] ^ c[3];
+    newcrc[3] = d[59] ^ d[55] ^ d[54] ^ d[53] ^ d[52] ^ d[50] ^ d[48] ^ d[47] ^ d[44] ^ d[40] ^ d[39] ^ d[38] ^ d[37] ^ d[32] ^ d[31] ^ d[30] ^ d[29] ^ d[25] ^ d[24] ^ d[23] ^ d[22] ^ d[20] ^ d[18] ^ d[17] ^ d[14] ^ d[10] ^ d[9] ^ d[8] ^ d[7] ^ d[5] ^ d[3] ^ d[2] ^ c[1] ^ c[3];
+    nextCRC4_D68 = newcrc;
+  end
+  endfunction
+  
+endmodule
+
