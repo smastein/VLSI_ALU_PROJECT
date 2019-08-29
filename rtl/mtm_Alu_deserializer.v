@@ -15,7 +15,7 @@ localparam 	IDLE = 3'b000,
 
 localparam 	DATA = 1'b0,
 			CMD = 1'b1;
-
+reg [3:0] CRC;
 reg [1:0] operation;
 reg [2:0] address;
 reg [1:0] CTL_check;
@@ -85,11 +85,11 @@ always @(posedge clk) begin
 					address = ERROR;
 					CTL = 8'b11001001;
 				end
-				else if(bit_counter=0 && sin != 0) begin
+				else if(bit_counter==0 && sin != 0) begin
 					address = ERROR;
 					CTL = 8'b11001001;
 				end
-				else if(bit_counter = 10 && sin != 1) begin
+				else if(bit_counter == 10 && sin != 1) begin
 					address = ERROR;
 					CTL = 8'b11001001;
 				end

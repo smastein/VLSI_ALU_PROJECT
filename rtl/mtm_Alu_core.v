@@ -1,17 +1,21 @@
 module mtm_Alu_core (
     input wire clk,
     input wire rst_n,
-    input wire A,
-	input wire B,
-	input wire CTL_in,
-	output reg C,
-    output reg CTL_out
+    input wire [31:0] A,
+	input wire [31:0] B,
+	input wire [7:0] CTL_in,
+	output reg [31:0] C,
+    output reg [7:0] CTL_out
 ) ;
 
 // CTL( {1'b0, OP, CRC} ) 
+wire [2:0] OP;
+wire [3:0] CRC;
+
 assign OP = CTL_in[6:4];
 assign CRC = CTL_in[3:0];
 
+reg [31:0] C_nxt;
 reg Carry,
 	Overflow, 
 	Zero, 
@@ -43,31 +47,32 @@ always @(posedge clk) begin
 		if(CTL_in[7] == 0) begin
 			case(OP)
 				AND: begin						//CTL( {1'b0, FLAGS, CRC)
-					C = A & B;					//FLAGS = { Carry, Overflow, Zero, Negative } - 4 bits of ALU flags
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};				//CRC is 3-bit CRC checksum calculated for 37 bits of { C, 1'b0, FLAGS },
+					C_nxt = A & B;					//FLAGS = { Carry, Overflow, Zero, Negative } - 4 bits of ALU flags
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C_nxt,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};				//CRC is 3-bit CRC checksum calculated for 37 bits of { C, 1'b0, FLAGS },
 				end							
 				OR: begin
-					C = A | B;
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
+					C_nxt = A | B;
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C_nxt,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				ADD: begin
-					{Carry,C} <= A+B;
-					Zero = ~(|C);
-					Overflow = ({Carry,C[31]} == 2'b01);
-					Negative = (C[31] == 1);
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
+					{Carry,C_nxt} <= A+B;
+					Zero = ~(|C_nxt);
+					Overflow = ({Carry,C_nxt[31]} == 2'b01);
+					Negative = (C_nxt[31] == 1);
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C_nxt,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				SUB: begin
-					{Carry,C} <= A-B;
-					Zero = ~(|C);
-					Overflow = ({Carry,C[31]} == 2'b01);
+					{Carry,C_nxt} <= A-B;
+					Zero = ~(|C_nxt);
+					Overflow = ({Carry,C_nxt[31]} == 2'b01);
 					Negative = (A < B);
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C_nxt,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				default: begin
 					CTL_out = 8'b10010011;
 				end
 			endcase
+			C = C_nxt;
 		end
 		else if(CTL_in == 8'b10100101 || CTL_in == 8'b11001001) begin
 			CTL_out = CTL_in;
@@ -103,16 +108,15 @@ always @(posedge clk) begin
   // polynomial: x^3 + x^1 + 1
   // data width: 36
   // convention: the first serial bit is D[35]
-  function [2:0] nextCRC3_D36;
-
-    input [35:0] Data;
-    input [2:0] crc;
-    reg [35:0] d;
-    reg [2:0] c;
-    reg [2:0] newcrc;
-  begin
-    d = Data;
-    c = crc;
+    function [2:0] nextCRC3_D36;  
+        input [35:0] Data;
+        input [2:0] crc;
+        reg [35:0] d;
+        reg [2:0] c;
+        reg [2:0] newcrc;
+    begin
+        d = Data;
+        c = crc;
 
     newcrc[0] = d[35] ^ d[32] ^ d[31] ^ d[30] ^ d[28] ^ d[25] ^ d[24] ^ d[23] ^ d[21] ^ d[18] ^ d[17] ^ d[16] ^ d[14] ^ d[11] ^ d[10] ^ d[9] ^ d[7] ^ d[4] ^ d[3] ^ d[2] ^ d[0] ^ c[2];
     newcrc[1] = d[35] ^ d[33] ^ d[30] ^ d[29] ^ d[28] ^ d[26] ^ d[23] ^ d[22] ^ d[21] ^ d[19] ^ d[16] ^ d[15] ^ d[14] ^ d[12] ^ d[9] ^ d[8] ^ d[7] ^ d[5] ^ d[2] ^ d[1] ^ d[0] ^ c[0] ^ c[2];
