@@ -86,7 +86,6 @@ always @(posedge clk) begin
 			CTL_out = 8'b00000000;
 		end
 	end
-	 $display("2.2");
 end
 	////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 1999-2008 Easics NV.
@@ -126,4 +125,5 @@ end
     nextCRC3_D36 = newcrc;
   end
   endfunction
+ $display("2.2");
 endmodule

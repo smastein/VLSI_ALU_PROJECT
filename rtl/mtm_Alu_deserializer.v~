@@ -43,7 +43,6 @@ always @(posedge clk) begin
 		address = IDLE;
 	end
 	else begin
-		$display("1.1");
 		case(address)
 			IDLE: begin
 				if(sin == 0) begin

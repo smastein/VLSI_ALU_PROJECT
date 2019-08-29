@@ -41,18 +41,18 @@ mtm_Alu_deserializer u_mtm_Alu_deserializer(
 
 mtm_Alu_core u_mtm_Alu_core(
 	.clk(clk),
-	.rst(rst_n),
+	.rst_n(rst_n),
 	//.sin(sin),
 	.A(A),
 	.B(B),
-	.CTL(CTL_in),
+	.CTL_in(CTL_in),
 	.C(C),
 	.CTL_out(CTL_out)
 );
 
 mtm_Alu_serializer u_mtm_Alu_serializer(
 	.clk(clk),
-	.rst(rst_n),
+	.rst_n(rst_n),
 	.C(C),
 	.CTL_out(CTL_out),
 	.sout(sout)

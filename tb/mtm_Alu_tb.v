@@ -34,11 +34,13 @@ module mtm_Alu_tb (
 
 	integer i,j,k, iter, count, l;
 	reg [31:0] 	A, 
-				B;
+			B,
+			Am,
+			Bm;
 	
-	reg [7:0] CTL;
-	reg [2:0] OP;
-	reg [3:0] CRC;
+	reg [7:0] CTL_f;
+	reg [2:0] OP_f;
+	reg [3:0] CRC_f;
 	reg [1:0] done;
 	reg [54:0] 	out, 
 				out_nxt;
@@ -48,9 +50,13 @@ module mtm_Alu_tb (
 				ADD = 3'b100,
 				SUB = 3'b101;
 
-				
+	reg 	xx=0,
+		mm=0,
+		xm=0,
+		mx=0;
+			
 	initial begin
-		clk = 0; 
+		clk = 1; 
 		i = 0; 
 		j = 0; 
 		k = 0; 
@@ -60,14 +66,17 @@ module mtm_Alu_tb (
 		iter = 1;
 		rst_n = 1;
 		sin = 1;
-		OP = 3'b000;
-		CRC = 4'b0000;
+		OP_f = 3'b000;
+		CRC_f = 4'b0000;
+		CTL_f = 8'b00000000;
 		
 		$display("Send valid data with crc error");
-		A = 4;
-		B = 2;
-		CTL = 8'b00001111;
-		send_calculation_data({B,A,CTL});
+		A = 32'b00000000000000000000000000000100;
+		B = 32'b00000000000000000000000000000011;
+		CTL_f = 8'b00001111;
+		//$display("1");
+		send_calculation_data({B,A,CTL_f});
+		//$display("2");
 		if(out[54:47] == 8'b10100101) begin
 			$display("PASS");
 		end
@@ -89,28 +98,25 @@ module mtm_Alu_tb (
 		$display("Send 1000 random valid data");
 		while(count <1000) begin
 			if(count%4 == 0) begin
-				OP = AND;
+				OP_f = AND;
 			end
 			if(count%4 == 1) begin
-				OP = OR;
+				OP_f = OR;
 			end
 			if(count%4 == 2) begin
-				OP = ADD
+				OP_f = ADD;
 			end
 			if(count%4 == 3) begin
-				OP = SUB;
+				OP_f = SUB;
 			end
 			count = count + 1;
-			CRC = nextCRC4_D68({B, A, 1'b1, OP},4'b0000);
+			CRC_f = nextCRC4_D68({B, A, 1'b1, OP_f},4'b0000);
 			A = $urandom;
 			B = $urandom;
-			CTL = {1'b0, OP, CRC};
-			send_calculation_data({B,A,CTL});
-			if(compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL)) begin
+			CTL_f = {1'b0, OP_f, CRC_f};
+			send_calculation_data({B,A,CTL_f});
+			if(compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f)) begin
 				done = 1;
-			end
-			else begin 
-				done = 0;
 			end
 		end
 		if(done == 1) begin
@@ -125,49 +131,47 @@ module mtm_Alu_tb (
 		Bm = 32'b11111111111111111111111111111111;
 		A = 32'b00000000000000000000000000000000;
 		B = 32'b00000000000000000000000000000000;
+		done = 0;
 		for(l=0; l<4; l = l+1) begin
 			if(l ==0) begin
-				OP = AND;
+				OP_f = AND;
 			end
 			else if(l ==1) begin
-				OP = OR;
+				OP_f = OR;
 			end
 			else if(l ==2) begin
-				OP = ADD;
+				OP_f = ADD;
 			end
 			else if(l ==3) begin
-				OP = SUB;
+				OP_f = SUB;
 			end
 			
 			//1
-			CRC = nextCRC4_D68({Bm, Am, 1'b1, OP},4'b0000);
-			CTL = {1'b0, OP, CRC};
-			send_calculation_data({Bm,Am,CTL});
-			xx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,Bm,CTL)
+			CRC_f = nextCRC4_D68({Bm, Am, 1'b1, OP_f},4'b0000);
+			CTL_f = {1'b0, OP_f, CRC_f};
+			send_calculation_data({Bm,Am,CTL_f});
+			xx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,Bm,CTL_f);
 			
 			//2
-			CRC = nextCRC4_D68({B, A, 1'b1, OP},4'b0000);
-			CTL = {1'b0, OP, CRC};
-			send_calculation_data({B,A,CTL});
-			mm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL)
+			CRC_f = nextCRC4_D68({B, A, 1'b1, OP_f},4'b0000);
+			CTL_f = {1'b0, OP_f, CRC_f};
+			send_calculation_data({B,A,CTL_f});
+			mm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f);
 			
 			//3
-			CRC = nextCRC4_D68({B, Am, 1'b1, OP},4'b0000);
-			CTL = {1'b0, OP, CRC};
-			send_calculation_data({B,Am,CTL});
-			xm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,B,CTL)
+			CRC_f = nextCRC4_D68({B, Am, 1'b1, OP_f},4'b0000);
+			CTL_f = {1'b0, OP_f, CRC_f};
+			send_calculation_data({B,Am,CTL_f});
+			xm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,B,CTL_f);
 			
 			//4
-			CRC = nextCRC4_D68({Bm, A, 1'b1, OP},4'b0000);
-			CTL = {1'b0, OP, CRC};
-			send_calculation_data({Bm,A,CTL});
-			mx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,Bm,CTL)
+			CRC_f = nextCRC4_D68({Bm, A, 1'b1, OP_f},4'b0000);
+			CTL_f = {1'b0, OP_f, CRC_f};
+			send_calculation_data({Bm,A,CTL_f});
+			mx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,Bm,CTL_f);
 			
 			if(xx == mm == xm == mx == 1) begin
 				done =1;
-			end
-			else begin
-				done =0;
 			end
 		end
 		if(done == 1) begin
@@ -182,6 +186,7 @@ module mtm_Alu_tb (
 		if(sout == 0 && k == 0) begin
 			iter = 55;
 			out_nxt[iter-1] = sout;
+			$display("lol");
 		end
 		else if(k > 1) begin
 			iter = k - 1;
@@ -199,100 +204,105 @@ module mtm_Alu_tb (
 	end
 
 	always begin
-		clk =  ! clk;
+		clk =  !clk;
+	//	$display("clk");
 	end
 	
-	task send_byte 
-		input [7:0] data;
-		input [1:0] CMD; //=0 - Data, =1 - CTL
+	task send_byte( 
+		input [7:0] Data,
+		input [1:0] CMD_input ); //=0 - Data, =1 - CTL
 		begin
 			for(i=0; i<11; i= i+1) begin
-				@(posedge clk); begin
+				@(posedge clk) begin
+			//		$display("no");
 					if(i == 0) begin
 						sin = 0;
 					end
 					else if(i == 10) begin
 						sin = 1;
 					end
-					else if(i == 1 && CMD == 0) begin
+					else if(i == 1 && CMD_input == 0) begin
 						sin = 0;
 					end
-					else if(i == 1 && CMD == 1) begin
+					else if(i == 1 && CMD_input == 1) begin
 						sin = 1;
 					end
 					else begin
-						sin = data[i-2];
+						sin = Data[i-2];
 					end
 				end
 			end
 		end
 	endtask
 
-	task send_calculation_data
-		input [71:0] data;
+	task send_calculation_data(
+		input [71:0] data_s);
 		begin
+			$display("3.00");
 			for(j=0; j<9; j=j+1) begin
-				@(posedge clk); begin
+				$display("3.11");
+				@(posedge clk) begin
+					$display("3.12");
 					if (j == 0) begin
-						send_byte(byte[31:24],0);
+		//				$display("3.0");
+						send_byte(data_s[31:24],0);
+		//				$display("3");
 					end
 					else if (j == 1) begin
-						send_byte(byte[23:16],0);
+						send_byte(data_s[23:16],0);
 					end
 					else if (j == 2) begin
-						send_byte(byte[15:8],0);
+						send_byte(data_s[15:8],0);
 					end
 					else if (j == 3) begin
-					  send_byte(byte[7:0],0);
+					  send_byte(data_s[7:0],0);
 					end
 					else if (j == 4) begin
-					  send_byte(byte[63:56],0);
+					  send_byte(data_s[63:56],0);
 					end
 					else if (j == 5) begin
-					  send_byte(byte[55:48],0);
+					  send_byte(data_s[55:48],0);
 					end
 					else if (j == 6) begin
-					  send_byte(byte[47:40],0);
+					  send_byte(data_s[47:40],0);
 					end
 					else if (j == 7) begin
-					  send_byte(byte[39:32],0);
+					  send_byte(data_s[39:32],0);
 					end
 					else if (j == 8) begin
-					  send_byte(byte[71:64],1);
+					  send_byte(data_s[71:64],1);
 					end
 				end
 			end
 		end
 	endtask
 
-	task compare
-		input [39:0] result;
-		input [31:0] A;
-		input [31:0] B;
-		input [7:0] CTL;
-		reg [32:0] expected;
-		output solution;
+	function compare (
+		input [39:0] result,
+		input [31:0] A,
+		input [31:0] B,
+		input [7:0] CTL_input);
+		//output [1:0] solution); 
+		reg [31:0] expected;
 		begin
-			case(CTL[6:4])
+			case(CTL_input[6:4])
 				AND: begin
-					expected = A & B;
+					expected = A&B;
 				end
 				OR: begin
-					expected = A | B;
+					expected = A|B;
 				end
 				ADD: begin
-					expected = A + B;
+					expected = A+B;
 				end
 				SUB: begin
-					expected = A - B;
+					expected = A-B;
 				end
 			endcase
 			
-			solution = expected == {result[6],rsult[39:8]} // {CARRY, A+B}
+			compare=(expected == {result[6],result[39:8]}); // {CARRY, A+B}
 		end
-	endtask
-
-endmodule
+	endfunction
 
 	////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 1999-2008 Easics NV.
