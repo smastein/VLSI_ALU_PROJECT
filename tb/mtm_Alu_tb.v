@@ -18,9 +18,9 @@
  * 
  * The test vectors must provide at least:
  * - sending max (0xFFFF) and min (0) data with all the ALU operations (AND OR, ADD,SUB)
- * - sending 1000 random valid data
- * - sending invalid data (wrong number of DATA packets before CTL packet)
- * - sending data with CRC error
+ * - sending 1000 random valid data															OK
+ * - sending invalid data (wrong number of DATA packets before CTL packet)					OK
+ * - sending data with CRC error															OK
  * 
  * The testbench should print final PASS/FAIL text information.
  */
@@ -32,7 +32,7 @@ module mtm_Alu_tb (
     output reg sout
 ) ;
 
-	integer i,j,k, iter, count;
+	integer i,j,k, iter, count, l;
 	reg [31:0] 	A, 
 				B;
 	
@@ -54,6 +54,7 @@ module mtm_Alu_tb (
 		i = 0; 
 		j = 0; 
 		k = 0; 
+		l = 0;
 		count = 0;
 		done =0;
 		iter = 1;
@@ -99,7 +100,7 @@ module mtm_Alu_tb (
 			if(count%4 == 3) begin
 				OP = SUB;
 			end
-			
+			count = count + 1;
 			CRC = nextCRC4_D68({B, A, 1'b1, OP},4'b0000);
 			A = $urandom;
 			B = $urandom;
@@ -120,8 +121,56 @@ module mtm_Alu_tb (
 		end
 		
 		$display("Send max (0xFFFF) and min (0) data with all the ALU operations (AND OR, ADD,SUB)");
-		
-		if() begin
+		Am = 32'b11111111111111111111111111111111; 
+		Bm = 32'b11111111111111111111111111111111;
+		A = 32'b00000000000000000000000000000000;
+		B = 32'b00000000000000000000000000000000;
+		for(l=0; l<4; l = l+1) begin
+			if(l ==0) begin
+				CTL = AND;
+			end
+			else if(l ==1) begin
+				CTL = OR;
+			end
+			else if(l ==2) begin
+				CTL = ADD;
+			end
+			else if(l ==3) begin
+				CTL = SUB;
+			end
+			
+			//1
+			CRC = nextCRC4_D68({Bm, Am, 1'b1, OP},4'b0000);
+			CTL = {1'b0, OP, CRC};
+			send_calculation_data();
+			xx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,Bm,CTL)
+			
+			//2
+			CRC = nextCRC4_D68({B, A, 1'b1, OP},4'b0000);
+			CTL = {1'b0, OP, CRC};
+			send_calculation_data();
+			mm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL)
+			
+			//3
+			CRC = nextCRC4_D68({B, Am, 1'b1, OP},4'b0000);
+			CTL = {1'b0, OP, CRC};
+			send_calculation_data();
+			xm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,B,CTL)
+			
+			//4
+			CRC = nextCRC4_D68({Bm, A, 1'b1, OP},4'b0000);
+			CTL = {1'b0, OP, CRC};
+			send_calculation_data();
+			mx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,Bm,CTL)
+			
+			if(xx == mm == xm == mx == 1) begin
+				done =1;
+			end
+			else begin
+				done =0;
+			end
+		end
+		if(done == 1) begin
 			$display("PASS");
 		end
 		else begin
