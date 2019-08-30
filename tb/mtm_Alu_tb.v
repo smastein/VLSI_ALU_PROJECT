@@ -186,7 +186,7 @@ module mtm_Alu_tb (
 		if(sout == 0 && k == 0) begin
 			iter = 55;
 			out_nxt[iter-1] = sout;
-			$display("lol");
+	//		$display("lol");
 		end
 		else if(k > 1) begin
 			iter = k - 1;
@@ -238,11 +238,11 @@ module mtm_Alu_tb (
 	task send_calculation_data(
 		input [71:0] data_s);
 		begin
-			$display("3.00");
+		//	$display("3.00");
 			for(j=0; j<9; j=j+1) begin
-				$display("3.11");
+		//		$display("3.11");
 				@(posedge clk) begin
-					$display("3.12");
+		//			$display("3.12");
 					if (j == 0) begin
 		//				$display("3.0");
 						send_byte(data_s[31:24],0);
