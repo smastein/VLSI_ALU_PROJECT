@@ -6,211 +6,97 @@ module mtm_Alu_deserializer (
 	output reg [31:0] B,
 	output reg [7:0] CTL
 ) ;
+	reg [3:0] CRC;
+	reg [3:0]bit_counter;
+	reg [10:0]data_a;
+	reg [10:0]data_b;
+	reg [10:0]data_ctl;
+	reg [3:0] packet_counter;
+	reg [1:0] error_data;
 
-localparam 	IDLE = 3'b000,
-			OPERATION = 3'b001,
-			TRANSFER = 3'b010,
-			ERROR = 3'b011,
-			END = 3'b100;
-
-localparam 	DATA = 1'b0,
-			CMD = 1'b1;
-reg [3:0] CRC;
-reg [1:0] operation;
-reg [2:0] address;
-reg [1:0] CTL_check;
-reg [3:0] bit_counter;
-reg [3:0] packet_counter;
-reg [63:0] packet_AB;
-reg [7:0] packet_CTL;
-//A -4 Packets , B - 4 packets, CTL - 1 packet = 9 packets = 99 bits 8*4*2 = 64/ 8
-
-initial begin
- // $display("1");
-  address = IDLE;
-  bit_counter = 0;
-  packet_counter = 0;
-  CTL_check = 0;
-  CTL = 8'b11111111;
-  A = 32'b00000000000000000000000000000000;
-  B = 32'b00000000000000000000000000000000;
-  packet_AB = 64'b0000000000000000000000000000000000000000000000000000000000000000;
-  packet_CTL = 8'b11111111;
-end
-
-always @(posedge clk) begin
-	if (!rst) begin
-		address = IDLE;
+	initial begin
+		bit_counter = 11;
+		packet_counter =0;
+		error_data =0;
+		data_a = 11'b11111111111;
+		data_b = 11'b11111111111;
+		data_ctl = 11'b11111111111;
+		
 	end
-	else begin
-		//$display("1.1");
-		case(address)
-			IDLE: begin
-				if(sin == 0) begin
-					address = TRANSFER;
-					bit_counter = 1;
-			//		$display("1.1");
-				end
-				else begin
-					address = IDLE;
+	
+	always @ (posedge clk) begin
+		if (!rst) begin
+			bit_counter = 11;
+			packet_counter =0;
+			error_data = 0;
+			data_a = 11'b11111111111;
+			data_b = 11'b11111111111;
+			data_ctl = 11'b11111111111;
+		
+		end 
+		else begin
+		if((!sin) || (bit_counter < 11)) begin
+			$display("sin :%b", sin);
+
+			if(bit_counter == 11) begin
+				bit_counter = 0;
+			end
+			if(bit_counter == 0 && sin ==1) begin
+				error_data=1;
+			end
+			else if(bit_counter ==1 && packet_counter <8 && sin == 1) begin
+				error_data =1;
+			end
+			else if(bit_counter ==1 && packet_counter ==8 && sin == 0) begin
+				error_data =1;
+			end
+			else if(bit_counter ==10 && sin != 1) begin
+				error_data =1;
+			end
+			else if(packet_counter <4) begin
+				data_a[11-1-bit_counter] = sin;			
+				bit_counter = bit_counter + 1;
+				if (bit_counter == 11) begin
+					packet_counter = packet_counter+1;
+					A= {A,data_a[9:1]};
+			
 				end
 			end
-			/*OPERATION: begin
-				if( bit_counter == 1 && sin ==1) begin
-			//		$display("2.2");
-					operation = CMD;
-					bit_counter = 2;
-					CTL_check = CTL_check + 1;
-					address = TRANSFER;
+			else if( packet_counter<8) begin
+				data_b[11-1-bit_counter] = sin;			
+				bit_counter = bit_counter + 1;
+				if (bit_counter == 11) begin
+					packet_counter = packet_counter+1;
+					B= {B,data_b[9:1]};
+			
 				end
-				else if(bit_counter == 1 && sin ==0) begin
-					operation = DATA;
-					bit_counter =2;
-			//		$display("2.1");
-					address = TRANSFER;
-				end
-			end*/
-			TRANSFER: begin
-				if(bit_counter == 1 && sin ==0 && packet_counter <8) begin
-					address = TRANSFER;
-					bit_counter =2;
-				end
-				else if(bit_counter == 1 && sin ==1 && packet_counter ==8) begin
-					address = TRANSFER;
-					bit_counter =2;
-				end
-				else if(bit_counter == 1 && sin ==0 && packet_counter ==8) begin
-				//	$display("3.1");
-					address = ERROR;
-					CTL = 8'b11001001;
-				end
-				else if(packet_counter == 9) begin
-			//		$display("3.0");
-					CRC = nextCRC4_D68({packet_AB[31:0],packet_AB[63:32],packet_CTL[6:4]}, 4'b0000);
-					if(CRC == packet_CTL[3:0]) begin
-						A = packet_AB[63:32];
-						B = packet_AB[31:0];
-						CTL = packet_CTL;
-						address = END;
-				//		$display("t: %b",A);
-				//		$display("%b",B);
-				//		$display("%b",CTL);
+			end
+			else if(packet_counter == 8) begin
+				data_ctl[11-1-bit_counter] = sin;			
+				bit_counter = bit_counter + 1;
+				if (bit_counter == 11) begin
+					CTL = data_ctl[9:1];
+					CRC = nextCRC4_D68({A,B,data_ctl[7:5]}, 4'b0000);
+					packet_counter = 0;
+					if(CRC == data_ctl[4:1]) begin
+						CTL = data_ctl[9:1];
 					end
 					else begin
-				//		$display("6.0");
-						address = ERROR;
 						CTL = 8'b10100101;
 					end
 				end
-				else if(bit_counter == 1 && sin ==1 && packet_counter <8) begin
-				//	$display("3.1");
-					address = ERROR;
-					CTL = 8'b11001001;
-				end
-				else if(bit_counter>10) begin
-				//	$display("3.2");
-					address = ERROR;
-					CTL = 8'b11001001;
-				end
-				else if(bit_counter==0 && sin != 0) begin
-				//	$display("3.3");
-					address = ERROR;
-					CTL = 8'b11001001;
-				end
-				else if(bit_counter == 10 && sin != 1) begin
-				//	$display("3.4");
-					address = ERROR;
-					CTL = 8'b11001001;
-				end
-				else if(bit_counter == 0 && sin == 0) begin
-				//	$display("3.5");
-					address = TRANSFER;
-					bit_counter = 1;
-				end
-				else if(bit_counter == 10 && sin == 1) begin
-				//	$display("3.6");
-					bit_counter = 0;
-					packet_counter = packet_counter + 1;
-					if(packet_counter ==9)
-						address = TRANSFER;
-					else
-						address = IDLE;
-					end
-				else if(packet_counter < 8) begin
-					packet_AB = {packet_AB,sin};
-					bit_counter = bit_counter + 1;
-					address = TRANSFER;
-				//	$display("3.7");
-				end
-				else if(packet_counter ==8) begin
-					packet_CTL = {packet_CTL,sin};
-					bit_counter = bit_counter + 1;
-					address = TRANSFER;
-				//	$display("3.8");
-				end
+			end
+			if ( error_data == 1) begin
+				CTL = 8'b11001001;
 				
 			end
-			ERROR: begin
-			//	$display("5.0");
-				if(packet_counter != 9) begin
-					if(bit_counter == 10) begin
-						packet_counter = packet_counter + 1;
-						bit_counter = 0;
-					end
-					else begin
-						bit_counter = bit_counter+1;
-					end
-				end
-				else begin
-					address = IDLE;
-					bit_counter = 0;
-					packet_counter = 0;
-					CTL_check =0;
-				end
-			end
-			END: begin
-			//	$display("4.0");
-				if(packet_counter != 9) begin
-					address = ERROR;
-					CTL = 8'b11001001;
-				end
-				else begin
-					address = IDLE;
-					CTL = 8'b11111111;
-					A = 32'b00000000000000000000000000000000;
-					B = 32'b00000000000000000000000000000000;
-					bit_counter = 0;
-					packet_counter = 0;
-					CTL_check =0;
-				end
-			end
-		endcase
-	//	$display("%b",CTL);
-	end
+		end
+		end
+	//	$display("A: %b",A);	
+	//	$display("B: %b",B);
+	//	$display("CTL: %b",CTL);
 end
-
-	////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1999-2008 Easics NV.
-// This source file may be used and distributed without restriction
-// provided that this copyright statement is not removed from the file
-// and that any derivative work contains the original copyright notice
-// and the associated disclaimer.
-//
-// THIS SOURCE FILE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS
-// OR IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
-// WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-//
-// Purpose : synthesizable CRC function
-//   * polynomial: x^4 + x^1 + 1
-//   * data width: 36
-//
-// Info : tools@easics.be
-//        http://www.easics.com
-////////////////////////////////////////////////////////////////////////////////
-  // polynomial: x^4 + x^1 + 1
-  // data width: 68
-  // convention: the first serial bit is D[67]
-  function [3:0] nextCRC4_D68;
+function [3:0] nextCRC4_D68;
 
     input [67:0] Data;
     input [3:0] crc;
@@ -229,3 +115,4 @@ end
   end
   endfunction
 endmodule
+

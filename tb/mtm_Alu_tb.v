@@ -86,10 +86,13 @@ module mtm_Alu_tb (
 		end
 		
 		$display("Send invalid data (wrong number of DATA packets before CTL packet)");
+		out = 0;
 		send_byte(8'b01010101,0);
 		send_byte(8'b00001111,0);
 		send_byte(8'b01010000,1);
-		#10000 done = (out[52:45] ==8'b11001001);
+		$display("CTL#########################################3: %b", out[52:45]);
+		#15000 done = (out[52:45] ==8'b11001001);
+		$display("CTL1: %b", out[52:45]);
 		if(done) begin
 			$display("PASS");
 		end
@@ -97,28 +100,33 @@ module mtm_Alu_tb (
 			$display("FAIL");
 		end
 	
-		$display("Send 1000 random valid data");
+	/*	$display("Send 1000 random valid data");
 		while(count <1000) begin
 			if(count%4 == 0) begin
-				OP_f = AND;
+				OP_f = 3'b000;
 			end
 			if(count%4 == 1) begin
-				OP_f = OR;
+				OP_f = 3'b001;
 			end
 			if(count%4 == 2) begin
-				OP_f = ADD;
+				OP_f = 3'b100;
 			end
 			if(count%4 == 3) begin
-				OP_f = SUB;
+				OP_f = 3'b101;
 			end
 			#1000 count = count + 1;
 			A = $urandom;
 			B = $urandom;
-			CRC_f = nextCRC4_D68({B, A, 1'b1, OP_f},4'b0000);
+			$display("A: %b", A);
+			$display("B: %b", B);
+			CRC_f = nextCRC4_D68({A, B, 1'b1, OP_f},4'b0000);
 			CTL_f = {1'b0, OP_f, CRC_f};
+			
 			send_calculation_data({CTL_f,B,A});
+			$display("out: %b",out[52:1]);
 			if(!compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f)) begin
 				done = 0;
+				$display("ELO");
 			end
 		end
 		if(done == 1) begin
@@ -136,16 +144,16 @@ module mtm_Alu_tb (
 		done = 0;
 		for(l=0; l<4; l = l+1) begin
 			if(l ==0) begin
-				OP_f = AND;
+				OP_f = 3'b000;
 			end
 			else if(l ==1) begin
-				OP_f = OR;
+				OP_f = 3'b001;
 			end
 			else if(l ==2) begin
-				OP_f = ADD;
+				OP_f = 3'b100;
 			end
 			else if(l ==3) begin
-				OP_f = SUB;
+				OP_f = 3'b101;
 			end
 			
 			//1
@@ -171,7 +179,7 @@ module mtm_Alu_tb (
 			CTL_f = {1'b0, OP_f, CRC_f};
 			send_calculation_data({CTL_f,Bm,A});
 			mx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,Bm,CTL_f);*/
-			
+		/*	
 			if(xx == mm == 1) begin
 				done =1;
 			end
@@ -181,23 +189,24 @@ module mtm_Alu_tb (
 		end
 		else begin
 			$display("FAIL");
-		end
+		end*/
 		$finish;
 	end
 	
 	always @(*) begin
-	//	$display("cos");
-		if(sout == 0 && k == 0) begin
-			iter = 55;
-			out_nxt[iter-1] = sout;
+	//	$display("cos: %b", sout);
+	//	$display("k: %d",k); 
+		if(k > 0) begin
+			out_nxt[k-1] = sout;
+			iter = k-1;
 //			$display("lol");
 		end
-		else if(k > 1) begin
-			iter = k - 1;
-			out_nxt[iter-1] = sout;
+		else if(k== 0) begin
+			iter = -1;
 		end
-		else if(k == 1) begin
-			iter = 0;
+		else if(sout == 0) begin
+			iter = 54;
+			out_nxt[54] = 0;
 		end
 		  
 	end
@@ -304,7 +313,7 @@ module mtm_Alu_tb (
 					expected = A-B;
 				end
 			endcase
-			
+		//display("exp: %b", expected); 
 			compare=(expected == {result[6],result[39:8]}); // {CARRY, A+B}
 		end
 	endfunction

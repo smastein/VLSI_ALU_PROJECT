@@ -41,7 +41,7 @@ always @(posedge clk) begin
 		Overflow = 0; 
 		Zero = 0; 
 		Negative = 0;
-		CTL_out = 8'b10000000;
+		CTL_out = 8'b11111111;
 		C = 0;
 	end
 	else begin
@@ -72,11 +72,13 @@ always @(posedge clk) begin
 				end
 				default: begin
 					CTL_out = 8'b10010011;
+					//C = 32'b11111111111111111111111111111111;
 				end
 			endcase
 		end
 		else if(CTL_in == 8'b10100101 || CTL_in == 8'b11001001) begin
 			CTL_out = CTL_in;
+			//C = 32'b11111111111111111111111111111111;
 			//$display("CTL_core: %b", CTL_out);
 		end
 		else begin
@@ -126,4 +128,25 @@ end
     nextCRC3_D36 = newcrc;
   end
   endfunction
+
+function [3:0] nextCRC4_D68;
+
+    input [67:0] Data;
+    input [3:0] crc;
+    reg [67:0] d;
+    reg [3:0] c;
+    reg [3:0] newcrc;
+  begin
+    d = Data;
+    c = crc;
+
+    newcrc[0] = d[60] ^ d[56] ^ d[55] ^ d[54] ^ d[53] ^ d[51] ^ d[49] ^ d[48] ^ d[45] ^ d[41] ^ d[40] ^ d[39] ^ d[38] ^ d[36] ^ d[33] ^ d[32] ^ d[31] ^ d[30] ^ d[26] ^ d[25] ^ d[24] ^ d[23] ^ d[21] ^ d[19] ^ d[18] ^ d[15] ^ d[11] ^ d[10] ^ d[9] ^ d[8] ^ d[6] ^ d[4] ^ d[3] ^ d[0] ^ c[0] ^ c[2];
+    newcrc[1] = d[60] ^ d[57] ^ d[53] ^ d[52] ^ d[51] ^ d[50] ^ d[48] ^ d[46] ^ d[45] ^ d[42] ^ d[38] ^ d[37] ^ d[36] ^ d[34] ^ d[30] ^ d[29] ^ d[27] ^ d[23] ^ d[22] ^ d[21] ^ d[20] ^ d[18] ^ d[16] ^ d[15] ^ d[12] ^ d[8] ^ d[7] ^ d[6] ^ d[5] ^ d[3] ^ d[1] ^ d[0] ^ c[1] ^ c[2] ^ c[3];
+    newcrc[2] = d[58] ^ d[54] ^ d[53] ^ d[52] ^ d[51] ^ d[49] ^ d[47] ^ d[46] ^ d[43] ^ d[39] ^ d[38] ^ d[37] ^ d[36] ^ d[35] ^ d[31] ^ d[30] ^ d[29] ^ d[28] ^ d[24] ^ d[23] ^ d[22] ^ d[21] ^ d[19] ^ d[17] ^ d[16] ^ d[13] ^ d[9] ^ d[8] ^ d[7] ^ d[6] ^ d[4] ^ d[2] ^ d[1] ^ c[0] ^ c[2] ^ c[3];
+    newcrc[3] = d[59] ^ d[55] ^ d[54] ^ d[53] ^ d[52] ^ d[50] ^ d[48] ^ d[47] ^ d[44] ^ d[40] ^ d[39] ^ d[38] ^ d[37] ^ d[32] ^ d[31] ^ d[30] ^ d[29] ^ d[25] ^ d[24] ^ d[23] ^ d[22] ^ d[20] ^ d[18] ^ d[17] ^ d[14] ^ d[10] ^ d[9] ^ d[8] ^ d[7] ^ d[5] ^ d[3] ^ d[2] ^ c[1] ^ c[3];
+    nextCRC4_D68 = newcrc;
+  end
+  endfunction
+endmodule
+
 endmodule

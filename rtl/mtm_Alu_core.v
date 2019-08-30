@@ -72,11 +72,13 @@ always @(posedge clk) begin
 				end
 				default: begin
 					CTL_out = 8'b10010011;
+					//C = 32'b11111111111111111111111111111111;
 				end
 			endcase
 		end
 		else if(CTL_in == 8'b10100101 || CTL_in == 8'b11001001) begin
 			CTL_out = CTL_in;
+			//C = 32'b11111111111111111111111111111111;
 			//$display("CTL_core: %b", CTL_out);
 		end
 		else begin
@@ -126,4 +128,5 @@ end
     nextCRC3_D36 = newcrc;
   end
   endfunction
+
 endmodule
