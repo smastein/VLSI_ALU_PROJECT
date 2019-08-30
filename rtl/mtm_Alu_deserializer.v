@@ -26,16 +26,16 @@ reg [7:0] packet_CTL;
 //A -4 Packets , B - 4 packets, CTL - 1 packet = 9 packets = 99 bits 8*4*2 = 64/ 8
 
 initial begin
-//  $display("1");
+ // $display("1");
   address = IDLE;
   bit_counter = 0;
   packet_counter = 0;
   CTL_check = 0;
-  CTL = 8'b00000000;
+  CTL = 8'b11111111;
   A = 32'b00000000000000000000000000000000;
   B = 32'b00000000000000000000000000000000;
   packet_AB = 64'b0000000000000000000000000000000000000000000000000000000000000000;
-  packet_CTL = 8'b00000000;
+  packet_CTL = 8'b11111111;
 end
 
 always @(posedge clk) begin
@@ -43,81 +43,116 @@ always @(posedge clk) begin
 		address = IDLE;
 	end
 	else begin
-		$display("1.1");
+		//$display("1.1");
 		case(address)
 			IDLE: begin
 				if(sin == 0) begin
-					address = OPERATION;
+					address = TRANSFER;
 					bit_counter = 1;
+			//		$display("1.1");
 				end
 				else begin
 					address = IDLE;
 				end
 			end
-			OPERATION: begin
+			/*OPERATION: begin
 				if( bit_counter == 1 && sin ==1) begin
+			//		$display("2.2");
 					operation = CMD;
 					bit_counter = 2;
 					CTL_check = CTL_check + 1;
+					address = TRANSFER;
 				end
 				else if(bit_counter == 1 && sin ==0) begin
 					operation = DATA;
 					bit_counter =2;
+			//		$display("2.1");
+					address = TRANSFER;
 				end
-			end
+			end*/
 			TRANSFER: begin
-				if(packet_counter == 8) begin
+				if(bit_counter == 1 && sin ==0 && packet_counter <8) begin
+					address = TRANSFER;
+					bit_counter =2;
+				end
+				else if(bit_counter == 1 && sin ==1 && packet_counter ==8) begin
+					address = TRANSFER;
+					bit_counter =2;
+				end
+				else if(bit_counter == 1 && sin ==0 && packet_counter ==8) begin
+				//	$display("3.1");
+					address = ERROR;
+					CTL = 8'b11001001;
+				end
+				else if(packet_counter == 9) begin
+			//		$display("3.0");
 					CRC = nextCRC4_D68({packet_AB[31:0],packet_AB[63:32],packet_CTL[6:4]}, 4'b0000);
 					if(CRC == packet_CTL[3:0]) begin
 						A = packet_AB[63:32];
 						B = packet_AB[31:0];
 						CTL = packet_CTL;
 						address = END;
+				//		$display("t: %b",A);
+				//		$display("%b",B);
+				//		$display("%b",CTL);
 					end
 					else begin
+				//		$display("6.0");
 						address = ERROR;
 						CTL = 8'b10100101;
 					end
 				end
-				else if(CTL_check>1) begin
+				else if(bit_counter == 1 && sin ==1 && packet_counter <8) begin
+				//	$display("3.1");
 					address = ERROR;
 					CTL = 8'b11001001;
 				end
 				else if(bit_counter>10) begin
+				//	$display("3.2");
 					address = ERROR;
 					CTL = 8'b11001001;
 				end
 				else if(bit_counter==0 && sin != 0) begin
+				//	$display("3.3");
 					address = ERROR;
 					CTL = 8'b11001001;
 				end
 				else if(bit_counter == 10 && sin != 1) begin
+				//	$display("3.4");
 					address = ERROR;
 					CTL = 8'b11001001;
 				end
 				else if(bit_counter == 0 && sin == 0) begin
-					address = OPERATION;
+				//	$display("3.5");
+					address = TRANSFER;
 					bit_counter = 1;
 				end
 				else if(bit_counter == 10 && sin == 1) begin
-					address = TRANSFER;
+				//	$display("3.6");
 					bit_counter = 0;
 					packet_counter = packet_counter + 1;
+					if(packet_counter ==9)
+						address = TRANSFER;
+					else
+						address = IDLE;
 					end
-				else if(operation ==DATA) begin
+				else if(packet_counter < 8) begin
 					packet_AB = {packet_AB,sin};
 					bit_counter = bit_counter + 1;
 					address = TRANSFER;
+				//	$display("3.7");
 				end
-				else if(operation == CMD) begin
+				else if(packet_counter ==8) begin
 					packet_CTL = {packet_CTL,sin};
 					bit_counter = bit_counter + 1;
 					address = TRANSFER;
+				//	$display("3.8");
 				end
 				
 			end
 			ERROR: begin
-				if(packet_counter != 8) begin
+			//	$display("5.0");
+				if(packet_counter != 9) begin
 					if(bit_counter == 10) begin
 						packet_counter = packet_counter + 1;
 						bit_counter = 0;
@@ -134,18 +169,14 @@ always @(posedge clk) begin
 				end
 			end
 			END: begin
-				if(packet_counter != 8) begin
-					if(bit_counter == 10) begin
-						packet_counter = packet_counter + 1;
-						bit_counter = 0;
-					end
-					else begin
-						bit_counter = bit_counter+1;
-					end
+			//	$display("4.0");
+				if(packet_counter != 9) begin
+					address = ERROR;
+					CTL = 8'b11001001;
 				end
 				else begin
 					address = IDLE;
-					CTL = 8'b00000000;
+					CTL = 8'b11111111;
 					A = 32'b00000000000000000000000000000000;
 					B = 32'b00000000000000000000000000000000;
 					bit_counter = 0;
@@ -154,8 +185,8 @@ always @(posedge clk) begin
 				end
 			end
 		endcase
+	//	$display("%b",CTL);
 	end
-//	$display("1.1");
 end
 
 	////////////////////////////////////////////////////////////////////////////////

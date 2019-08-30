@@ -29,7 +29,7 @@ module mtm_Alu_tb (
     output reg clk,
     output reg rst_n,
     output reg sin,
-    output reg sout
+    input wire sout
 ) ;
 
 	integer i,j,k, iter, count, l;
@@ -41,7 +41,7 @@ module mtm_Alu_tb (
 	reg [7:0] CTL_f;
 	reg [2:0] OP_f;
 	reg [3:0] CRC_f;
-	reg [1:0] done;
+	reg done;
 	reg [54:0] 	out, 
 				out_nxt;
 	
@@ -59,36 +59,38 @@ module mtm_Alu_tb (
 		clk = 1; 
 		i = 0; 
 		j = 0; 
-		k = 0; 
+		k = 1; 
 		l = 0;
 		count = 0;
 		done =0;
 		iter = 1;
 		rst_n = 1;
-		sin = 1;
 		OP_f = 3'b000;
 		CRC_f = 4'b0000;
 		CTL_f = 8'b00000000;
 		
 		$display("Send valid data with crc error");
-		A = 32'b00000000000000000000000000000100;
-		B = 32'b00000000000000000000000000000011;
-		CTL_f = 8'b00001111;
+		A = 5;
+		B = 2;
+		CTL_f = 8'b01000000;
 		//$display("1");
-		send_calculation_data({B,A,CTL_f});
-		//$display("2");
-		if(out[54:47] == 8'b10100101) begin
+		send_calculation_data({CTL_f,B,A});
+		$display("CTL: %b", out[52:45]);
+		#10000 done = {out[52:45]} == 8'b10100101; 
+		$display("CTL1: %b", out[52:45]);
+		if(done) begin
 			$display("PASS");
 		end
 		else begin
-			$display("FAIL");
+			$display("FAIL %b",done);
 		end
 		
 		$display("Send invalid data (wrong number of DATA packets before CTL packet)");
 		send_byte(8'b01010101,0);
 		send_byte(8'b00001111,0);
 		send_byte(8'b01010000,1);
-		if(out[54:47] == 8'b11001001) begin
+		#10000 done = (out[52:45] ==8'b11001001);
+		if(done) begin
 			$display("PASS");
 		end
 		else begin
@@ -109,14 +111,14 @@ module mtm_Alu_tb (
 			if(count%4 == 3) begin
 				OP_f = SUB;
 			end
-			count = count + 1;
-			CRC_f = nextCRC4_D68({B, A, 1'b1, OP_f},4'b0000);
+			#1000 count = count + 1;
 			A = $urandom;
 			B = $urandom;
+			CRC_f = nextCRC4_D68({B, A, 1'b1, OP_f},4'b0000);
 			CTL_f = {1'b0, OP_f, CRC_f};
-			send_calculation_data({B,A,CTL_f});
-			if(compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f)) begin
-				done = 1;
+			send_calculation_data({CTL_f,B,A});
+			if(!compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f)) begin
+				done = 0;
 			end
 		end
 		if(done == 1) begin
@@ -149,28 +151,28 @@ module mtm_Alu_tb (
 			//1
 			CRC_f = nextCRC4_D68({Bm, Am, 1'b1, OP_f},4'b0000);
 			CTL_f = {1'b0, OP_f, CRC_f};
-			send_calculation_data({Bm,Am,CTL_f});
-			xx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,Bm,CTL_f);
+			send_calculation_data({CTL_f,Bm,Am});
+			#20000 xx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,Bm,CTL_f);
 			
 			//2
 			CRC_f = nextCRC4_D68({B, A, 1'b1, OP_f},4'b0000);
 			CTL_f = {1'b0, OP_f, CRC_f};
-			send_calculation_data({B,A,CTL_f});
-			mm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f);
+			send_calculation_data({CTL_f,B,A});
+			#20000 mm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f);
 			
-			//3
+		/*	//3
 			CRC_f = nextCRC4_D68({B, Am, 1'b1, OP_f},4'b0000);
 			CTL_f = {1'b0, OP_f, CRC_f};
-			send_calculation_data({B,Am,CTL_f});
+			send_calculation_data({CTL_f,B,Am});
 			xm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,B,CTL_f);
 			
 			//4
 			CRC_f = nextCRC4_D68({Bm, A, 1'b1, OP_f},4'b0000);
 			CTL_f = {1'b0, OP_f, CRC_f};
-			send_calculation_data({Bm,A,CTL_f});
-			mx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,Bm,CTL_f);
+			send_calculation_data({CTL_f,Bm,A});
+			mx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,Bm,CTL_f);*/
 			
-			if(xx == mm == xm == mx == 1) begin
+			if(xx == mm == 1) begin
 				done =1;
 			end
 		end
@@ -180,13 +182,15 @@ module mtm_Alu_tb (
 		else begin
 			$display("FAIL");
 		end
+		$finish;
 	end
 	
 	always @(*) begin
+	//	$display("cos");
 		if(sout == 0 && k == 0) begin
 			iter = 55;
 			out_nxt[iter-1] = sout;
-	//		$display("lol");
+//			$display("lol");
 		end
 		else if(k > 1) begin
 			iter = k - 1;
@@ -201,10 +205,11 @@ module mtm_Alu_tb (
 	always @(posedge clk) begin
 		out = out_nxt;
 		k = iter;
+		$display("OUT: %b",out);
 	end
 
 	always begin
-		clk =  !clk;
+		#100 clk =  !clk;
 	//	$display("clk");
 	end
 	
@@ -212,25 +217,27 @@ module mtm_Alu_tb (
 		input [7:0] Data,
 		input [1:0] CMD_input ); //=0 - Data, =1 - CTL
 		begin
-			for(i=0; i<11; i= i+1) begin
+			for(i=11; i>0; i= i-1) begin
 				@(posedge clk) begin
-			//		$display("no");
-					if(i == 0) begin
-						sin = 0;
+					if(CMD_input ==0) begin
+						if(i==11 || i==10)
+							#2sin=0;
+						else if(i == 1)
+							#2sin = 1;
+						else
+							#2sin=Data[i-2];
 					end
-					else if(i == 10) begin
-						sin = 1;
+					if(CMD_input == 1) begin
+						if(i==11)
+							#2sin =0;
+						else if(i ==1 || i == 10)
+							#2sin = 1;
+						else 
+							#2sin = Data[i-2];
 					end
-					else if(i == 1 && CMD_input == 0) begin
-						sin = 0;
-					end
-					else if(i == 1 && CMD_input == 1) begin
-						sin = 1;
-					end
-					else begin
-						sin = Data[i-2];
-					end
+
 				end
+				//$display("s: %b",sin);
 			end
 		end
 	endtask
@@ -238,15 +245,13 @@ module mtm_Alu_tb (
 	task send_calculation_data(
 		input [71:0] data_s);
 		begin
-		//	$display("3.00");
+	//		$display("3.00");
 			for(j=0; j<9; j=j+1) begin
-		//		$display("3.11");
+	//			$display("3.11");
 				@(posedge clk) begin
 		//			$display("3.12");
 					if (j == 0) begin
-		//				$display("3.0");
 						send_byte(data_s[31:24],0);
-		//				$display("3");
 					end
 					else if (j == 1) begin
 						send_byte(data_s[23:16],0);
@@ -280,7 +285,7 @@ module mtm_Alu_tb (
 	function compare (
 		input [39:0] result,
 		input [31:0] A,
-		input [31:0] B,
+		input [32:0] B,
 		input [7:0] CTL_input);
 		//output [1:0] solution); 
 		reg [31:0] expected;
