@@ -19,7 +19,7 @@ reg [1:0] packets_avail;
 reg [5:0] bit_counter;
 
 initial begin
-  $display("3");
+//  $display("3");
   state = IDLE;
   packets_dest = 0;
   bit_counter = 0;
@@ -115,7 +115,7 @@ always @(posedge clk) begin
 			end
 		endcase
 	end
-	$display("3.3");
+//	$display("3.3");
 end
 
 endmodule
