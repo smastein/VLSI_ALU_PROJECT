@@ -26,7 +26,7 @@ reg [7:0] packet_CTL;
 //A -4 Packets , B - 4 packets, CTL - 1 packet = 9 packets = 99 bits 8*4*2 = 64/ 8
 
 initial begin
-  $display("1");
+//  $display("1");
   address = IDLE;
   bit_counter = 0;
   packet_counter = 0;
@@ -155,7 +155,7 @@ always @(posedge clk) begin
 			end
 		endcase
 	end
-	$display("1.1");
+//	$display("1.1");
 end
 
 	////////////////////////////////////////////////////////////////////////////////
