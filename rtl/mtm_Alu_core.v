@@ -28,7 +28,7 @@ localparam 	AND = 3'b000,
 
 			
 initial begin
-  $display("2");
+//  $display("2");
   Carry = 0; 
   Overflow = 0; 
   Zero = 0; 
@@ -86,7 +86,7 @@ always @(posedge clk) begin
 			CTL_out = 8'b00000000;
 		end
 	end
-	 $display("2.2");
+//	 $display("2.2");
 end
 	////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 1999-2008 Easics NV.
