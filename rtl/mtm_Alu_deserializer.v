@@ -48,23 +48,19 @@ module mtm_Alu_deserializer (
 		end 
 		else begin
 		if((!sin) || (bit_counter < 11)) begin
-			//$display("sin_des :%b", sin);
 
 			if(bit_counter == 11) begin
 				bit_counter = 0;
 			end
 			if (error == 1) begin
-				//$display("1");
 				if(bit_counter >0) begin
 					bit_counter = bit_counter -1;
-				//	$display("2");
 				end
 				else begin
           				CTL = 8'b11111111;
 					error = 0;
 					bit_counter = 11;
 					packet_counter = 0;
-				//	$display("3");
 				end
 				
 			end
@@ -123,9 +119,6 @@ module mtm_Alu_deserializer (
 				if (bit_counter == 11) begin
 					CTL = data_ctl[8:1];
 					CRC = nextCRC4_D68({A_nxt[31:0],B_nxt[31:0],1'b1,data_ctl[7:5]}, 4'b0000);
-				//	$display("Data: %b", {A_nxt[31:0],B_nxt[31:0],1'b1,data_ctl[7:5]});
-				//	$display("A_des: %b", A_nxt[31:0]);
-				//	$display("B_des: %b", B_nxt[31:0]);
 					packet_counter = 0;
 					if(CRC == data_ctl[4:1]) begin
 						A = A_nxt;
@@ -135,12 +128,9 @@ module mtm_Alu_deserializer (
 						bit_counter =1;
 					end
 					else begin
-					//	$display("CTL_DES: %b", CTL);
-					//	$display("CRC: %b", CRC);
 						CTL = 8'b10100101;
 						error =1;
 						bit_counter = 9;
-					//	$display("9999");
 					end
 				end
 			end
@@ -155,121 +145,8 @@ module mtm_Alu_deserializer (
 			
 		end
 		end
-	//	$display("A: %b",A);	
-	//	$display("B: %b",B);
-	//	$display("CTL_des: %b",CTL);
-end
-/*
-module mtm_Alu_deserializer (
-  input wire clk,
-  input wire rst,
-  input wire sin,
-  output reg [31:0] A,
-  output reg [31:0] B,
-  output reg [7:0] CTL
-);
-
-localparam IDLE = 2'd0;
-localparam LOAD = 2'd1;
-localparam DATA_ERR = 2'd2;
-localparam STOP = 2'd3;
-
-reg [7:0] bit_counter;
-reg [1:0] state;
-reg [3:0] CRC;
-reg [98:0] OUT;
-
-initial begin
-  state = IDLE;
-  bit_counter = 0;
-  CTL = 8'b11111111;
-  A = 32'b11111111111111111111111111111111;
-  B = 32'b11111111111111111111111111111111;
 end
 
-always @(posedge clk) begin
-  if (!rst) begin
-    state = IDLE;
-    bit_counter = 0;
-    CTL = 8'b11111111;
-    OUT = 99'b111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;
-  end
-  else begin
-    case(state)
-      IDLE: begin
-        if (sin == 0) begin
-          bit_counter = 97;
-          state = LOAD;
-          OUT = {OUT,sin};
-        end
-        else begin
-          state = IDLE;
-        end
-      end
-      LOAD: begin
-        if (bit_counter % 11 == 10 && sin == 1) begin
-          state = LOAD;
-        end
-        else if (bit_counter == 9 && sin == 0) begin
-          state = DATA_ERR;
-          bit_counter = 9;
-          CTL = 8'b11001001;
-        end
-        else if (bit_counter != 9 && bit_counter % 11 == 9 && sin == 1) begin
-          state = DATA_ERR;
-          bit_counter = 9;
-          CTL = 8'b11001001;
-        end
-        else if (bit_counter % 11 == 0 && sin == 0) begin
-          state = DATA_ERR;
-          bit_counter = 0;
-          CTL = 8'b11001001;
-        end
-        else if (bit_counter == 0 && sin == 1) begin
-          OUT = {OUT,sin};
-          CRC = nextCRC4_D68({OUT[96:89],OUT[85:78],OUT[74:67],OUT[63:56],OUT[52:45],OUT[41:34],OUT[30:23],OUT[19:12],1'b1,OUT[7:5]},4'b0000);
-          bit_counter = 2;
-          if (CRC == OUT[4:1]) begin
-            A = {OUT[96:89],OUT[85:78],OUT[74:67],OUT[63:56]};
-            B = {OUT[52:45],OUT[41:34],OUT[30:23],OUT[19:12]};
-            CTL = OUT[8:1];
-            state = STOP;
-          end
-          else begin
-            CTL = 8'b10100101;
-            state = DATA_ERR;
-          end
-        end
-        else begin
-          OUT = {OUT,sin};
-          bit_counter = bit_counter - 1;
-        end
-      end
-      DATA_ERR: begin
-        if (bit_counter > 0) begin
-          bit_counter = bit_counter - 1;
-        end
-        else begin
-          state = IDLE;
-          CTL = 8'b11111111;
-        end
-      end
-      STOP: begin
-        if (bit_counter > 0) begin
-          bit_counter = bit_counter - 1;
-        end
-        else begin
-          A = 32'b11111111111111111111111111111111;
-          B = 32'b11111111111111111111111111111111;
-          CTL = 32'b11111111;
-          state = IDLE;
-        end
-      end
-      endcase
-	$display("CTL_des: %b", CTL);
-    end
-  end
-*/
 function [3:0] nextCRC4_D68;
 
     input [67:0] Data;
