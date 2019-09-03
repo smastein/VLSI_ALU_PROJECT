@@ -171,7 +171,7 @@ always @(posedge clk) begin
       sout = 1;
     end
     else begin
-	//$display("CTL: %b", CTL_out);
+//	$display("CTL: %b", CTL_out);
       case(state)
         IDLE: begin
           if (CTL_out[7] == 0) begin
@@ -183,6 +183,8 @@ always @(posedge clk) begin
           end
           else if (CTL_out[7:0] == 8'b11001001 || CTL_out[7:0] == 8'b10010011 || CTL_out[7:0] == 8'b10100101) begin
             state = BEGIN;
+	//	$display("C: %b",C);
+	//	$display("CTL: %b",CTL_out);
             C_nxt = C;
             CTL_nxt = CTL_out;
             byte_counter = 1;
@@ -238,6 +240,9 @@ always @(posedge clk) begin
           state = BEGIN;
           end
       endcase
+
+//$display("sin: %b", sout);
+//$display("CTL_ser: %b",CTL_out);
     end
   end
 

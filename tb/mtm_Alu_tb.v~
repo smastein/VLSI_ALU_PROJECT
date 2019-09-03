@@ -126,8 +126,8 @@ module mtm_Alu_tb (
 		end
 
 		$display("Send valid data with crc error");
-		A = 3;
-		B = 7;
+		A = 5;
+		B = 2;
 		CTL_f = 8'b01000000;
 		//$display("1");
 		send_calculation_data({CTL_f,B,A});

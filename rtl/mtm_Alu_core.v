@@ -50,10 +50,18 @@ always @(posedge clk) begin
 			#1case(OP)
 				AND: begin						//CTL( {1'b0, FLAGS, CRC)
 					C = A & B;					//FLAGS = { Carry, Overflow, Zero, Negative } - 4 bits of ALU flags
+					Carry = 0; 
+					Overflow = 0; 
+					Zero = 0; 
+					Negative = 0;
 					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};				//CRC is 3-bit CRC checksum calculated for 37 bits of { C, 1'b0, FLAGS },
 				end							
 				OR: begin
 					C = A | B;
+					Carry = 0; 
+					Overflow = 0; 
+					Zero = 0; 
+					Negative = 0;
 					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				ADD: begin
@@ -88,6 +96,8 @@ always @(posedge clk) begin
 			Negative = 0;
 			CTL_out = 8'b11111111;
 		end
+		//$display("C: %b", C);
+		
 	end
 end
 	////////////////////////////////////////////////////////////////////////////////
