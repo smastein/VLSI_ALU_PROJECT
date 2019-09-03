@@ -1,156 +1,21 @@
-/*module mtm_Alu_serializer (
-    input wire clk,
-	input wire rst_n,
-	input wire [31:0] C,
-	input wire [7:0] CTL_out,
-	output reg sout
-) ;
-
-localparam 	IDLE = 3'b000,
-			FIRST_BIT = 3'b001,
-			SELEC = 3'b010,
-			TRANSFER_DATA = 3'b011,
-			TRANSFER_CMD = 3'b100,
-			END = 3'b101;
-			
-localparam 	DATA = 1'b0,
-		CMD = 1'b1;
-reg [2:0] state;
-reg [1:0] packets_dest;
-reg [1:0] packets_avail;
-reg [5:0] bit_counter;
-reg [1:0] operation;
-
-initial begin
-
-  state = IDLE;
-  packets_dest = 0;
-  bit_counter = 0;
-  packets_avail = 0;
-end
-
-always @(posedge clk) begin
-	if (!rst_n) begin
-		state = IDLE;
-		bit_counter = 0;
-		packets_avail = 0;
-		packets_dest = 0;
-		sout = 1;
-	end
-	else begin
-		//$display("CTL: %b", CTL_out);
-		case(state)
-			IDLE: begin
-				if(CTL_out[7] == 0) begin
-					packets_dest = 4;
-					packets_avail = 0;
-					bit_counter = 0;
-					state = FIRST_BIT;
-					operation = DATA;
-				end
-				else if(CTL_out[7:0] == 8'b10010011 || CTL_out[7:0] == 8'b11001001 || CTL_out[7:0] == 8'b10100101) begin //wrong OP , wrong DATA, wrong crc
-					$display("START_CMD");
-					packets_dest = 1;
-					packets_avail = 0;
-					bit_counter = 0;
-					state = FIRST_BIT;
-					operation = CMD;
-				end
-				else
-					sout =1;
-			end
-			FIRST_BIT: begin
-				$display("FIRST");
-				sout = 0;
-				state = SELEC;
-			end
-			SELEC: begin
-				$display("SELEC");
-				if(operation == DATA) begin
-					state = TRANSFER_DATA;
-					sout = 0;
-				end
-				else if(operation == CMD ) begin
-					state = TRANSFER_CMD;
-					sout = 1;
-				end
-			end
-			TRANSFER_DATA: begin
-				$display("DATA");
-				if((bit_counter+1)%8==0) begin
-					sout = C[31-bit_counter];
-					packets_avail = packets_avail + 1;
-					bit_counter = bit_counter + 1;
-					if(packets_dest != 2) begin
-						if(packets_avail == 3) begin
-							operation = CMD;
-						end
-					end
-					state = END;
-				end
-				else begin
-					sout = C[31-bit_counter];
-					bit_counter = bit_counter + 1;
-					$display("bit_counter: %d", bit_counter);
-				end
-			end
-			TRANSFER_CMD: begin
-				$display("CMD");
-				if((bit_counter+1)%8==0) begin
-					sout = CTL_out[7-bit_counter];
-					packets_avail = packets_avail + 1;
-					//bit_counter = bit_counter + 1;
-					operation = DATA;
-					state = END;
-				end
-				else begin
-					sout = CTL_out[7-bit_counter];
-					bit_counter = bit_counter + 1;
-				end
-			end
-			END: begin
-				$display("END");
-				sout = 1;
-				if(4-packets_avail ==0) begin
-					state = IDLE;
-				end
-				else if(packets_dest == 4 && operation == DATA) begin
-					state = FIRST_BIT;
-				end
-				else if(packets_dest == 1 && operation == DATA) begin
-					bit_counter = 0;
-					packets_dest = 2;
-					state = FIRST_BIT;
-				end
-				else begin
-					bit_counter = 0;
-					state = FIRST_BIT;
-				end
-			end
-		endcase
-		$display("sout_serial: %b", sout);
-	end
-
-end
-*/
 module mtm_Alu_serializer(
-  input  wire clk,   // posedge active clock
+  input  wire clk,   
   input  wire rst_n,
   input wire [31:0] C,
   input wire [7:0] CTL_out,
   output reg sout
   );
 
-  localparam IDLE = 4'd0;  //-- IDLE reposo
-  localparam SERIAL_C = 4'd1;
-  localparam SERIAL_CTL = 4'd2;
-  localparam BEGIN = 4'd3; //-- Receiving data
-  localparam BEGIN_2 = 4'd4;  //-- Storing the character received
-  localparam FINISH = 4'd5;   //-- Data is available
-  localparam NEXT = 4'd6;
+  localparam 	IDLE = 3'b000,  
+  	 	TRANSFER_DATA = 3'b001,
+	  	TRANSFER_CTL = 3'b010,
+  		FIRST_BIT = 3'b011, 
+		TRANSFER_OPT = 3'b100, 
+  		END = 3'b101;   
+
 
   reg [7:0] bit_counter;
-  reg [7:0] byte_counter;
+  reg [4:0] packet_counter;
   reg [2:0] state;
   reg [31:0] C_nxt;
   reg [7:0] CTL_nxt;
@@ -158,61 +23,58 @@ module mtm_Alu_serializer(
   initial begin
     state = IDLE;
     bit_counter = 0;
-    byte_counter = 0;
+    packet_counter = 0;
   end
 
 always @(posedge clk) begin
     if (!rst_n) begin
       state = IDLE;
       bit_counter = 0;
-      byte_counter = 0;
+      packet_counter = 5;
       CTL_nxt = 0;
       C_nxt = 0;
       sout = 1;
     end
     else begin
-//	$display("CTL: %b", CTL_out);
       case(state)
         IDLE: begin
-          if (CTL_out[7] == 0) begin
-            state = BEGIN;
+	  if (CTL_out[7] == 0) begin
             C_nxt = C;
             CTL_nxt = CTL_out;
-            byte_counter = 5;
+            packet_counter = 0;
             bit_counter = 31;
+	    state = FIRST_BIT;
           end
           else if (CTL_out[7:0] == 8'b11001001 || CTL_out[7:0] == 8'b10010011 || CTL_out[7:0] == 8'b10100101) begin
-            state = BEGIN;
-	//	$display("C: %b",C);
-	//	$display("CTL: %b",CTL_out);
+            state = FIRST_BIT;
             C_nxt = C;
             CTL_nxt = CTL_out;
-            byte_counter = 1;
+            packet_counter = 4;
           end
           else begin
             sout = 1;
           end
         end
-        BEGIN: begin
-          state = BEGIN_2;
+        FIRST_BIT: begin
           sout = 0;
+	  state = TRANSFER_OPT;
           end
-        BEGIN_2: begin
-          if (byte_counter > 1) begin
+	TRANSFER_OPT: begin // byte_counter> 1 for data (4packets) / =0 for ctl
+		if (packet_counter < 4) begin
             sout = 0;
-            state = SERIAL_C;
+            state = TRANSFER_DATA;
           end
           else begin
             sout = 1;
-            state = SERIAL_CTL;
+            state = TRANSFER_CTL;
             bit_counter = 7;
           end
         end
-        SERIAL_C: begin
+        TRANSFER_DATA: begin
           if ((bit_counter+1)% 8 == 1) begin
             sout = C_nxt[bit_counter];
-            state = FINISH;
-            byte_counter = byte_counter - 1;
+            state = END;
+            packet_counter = packet_counter + 1;
             bit_counter = bit_counter - 1;
           end
           else begin
@@ -220,29 +82,26 @@ always @(posedge clk) begin
             bit_counter = bit_counter - 1;
           end
         end
-        SERIAL_CTL: begin
+        TRANSFER_CTL: begin
           if (bit_counter == 0) begin
             sout = CTL_nxt[bit_counter];
-            state = FINISH;
-            byte_counter = byte_counter - 1;
+            packet_counter = packet_counter + 1;
+	    state = END;
           end
           else begin
             sout = CTL_nxt[bit_counter];
             bit_counter = bit_counter - 1;
           end
         end
-        FINISH: begin
+        END: begin
           sout = 1;
-          if (byte_counter == 0) begin
-            state = IDLE;
-            end
-            else
-          state = BEGIN;
+	  if (packet_counter == 5) begin
+            	state = IDLE;
+          end
+          else
+          	state = FIRST_BIT;
           end
       endcase
-
-//$display("sin: %b", sout);
-//$display("CTL_ser: %b",CTL_out);
     end
   end
 
