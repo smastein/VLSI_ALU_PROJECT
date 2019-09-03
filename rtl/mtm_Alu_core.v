@@ -15,7 +15,7 @@ wire [3:0] CRC;
 assign OP = CTL_in[6:4];
 assign CRC = CTL_in[3:0];
 
-reg [31:0] C_nxt;
+//reg [31:0] C_nxt;
 reg Carry,
 	Overflow, 
 	Zero, 
@@ -28,7 +28,7 @@ localparam 	AND = 3'b000,
 
 			
 initial begin
-  C_nxt = 32'b11111111111111111111111111111111;
+  //C_nxt = 32'b11111111111111111111111111111111;
   Carry = 0; 
   Overflow = 0; 
   Zero = 0; 
@@ -42,7 +42,7 @@ always @(posedge clk) begin
 		Zero = 0; 
 		Negative = 0;
 		CTL_out = 8'b11111111;
-		C_nxt = 32'b11111111111111111111111111111111;
+		//C_nxt = 32'b11111111111111111111111111111111;
 		C = 0;
 	end
 	else begin
@@ -50,41 +50,41 @@ always @(posedge clk) begin
 			
 			#1case(OP)
 				AND: begin						//CTL( {1'b0, FLAGS, CRC)
-					C_nxt = A & B;					//FLAGS = { Carry, Overflow, Zero, Negative } - 4 bits of ALU flags
+					C = A & B;					//FLAGS = { Carry, Overflow, Zero, Negative } - 4 bits of ALU flags
 					Carry = 0; 
 					Overflow = 0; 
 					Zero = 0; 
 					Negative = 0;
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C_nxt,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};				//CRC is 3-bit CRC checksum calculated for 37 bits of { C, 1'b0, FLAGS },
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};				//CRC is 3-bit CRC checksum calculated for 37 bits of { C, 1'b0, FLAGS },
 				end							
 				OR: begin
-					C_nxt = A | B;
+					C = A | B;
 					Carry = 0; 
 					Overflow = 0; 
 					Zero = 0; 
 					Negative = 0;
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C_nxt,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				ADD: begin
-					{Carry,C_nxt} <= A+B;
-					Zero = ~(|C_nxt);
-					Overflow = ({Carry,C_nxt[31]} == 2'b01);
-					Negative = (C_nxt[31] == 1);
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C_nxt,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
+					{Carry,C} = A+B;
+					Zero = ~(|C);
+					Overflow = ({Carry,C[31]} == 2'b01);
+					Negative = (C[31] == 1);
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				SUB: begin
-					{Carry,C_nxt} <= A-B;
-					Zero = ~(|C_nxt);
-					Overflow = ({Carry,C_nxt[31]} == 2'b01);
+					{Carry,C} = A-B;
+					Zero = ~(|C);
+					Overflow = ({Carry,C[31]} == 2'b01);
 					Negative = (A < B);
-					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C_nxt,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
+					CTL_out = {1'b0,Carry,Overflow,Zero,Negative,nextCRC3_D36({C,1'b0,Carry,Overflow,Zero,Negative}, 3'b000)};
 				end
 				default: begin
 					CTL_out = 8'b10010011;
 					//C = 32'b11111111111111111111111111111111;
 				end
 			endcase
-			C = C_nxt;
+			
 		end
 		else if(CTL_in == 8'b10100101 || CTL_in == 8'b11001001) begin
 			CTL_out = CTL_in;
@@ -97,7 +97,7 @@ always @(posedge clk) begin
 			Zero = 0;
 			Negative = 0;
 			CTL_out = 8'b11111111;
-			C_nxt = 32'b11111111111111111111111111111111;
+			
 			
 		end
 		//$display("C: %b", C);
