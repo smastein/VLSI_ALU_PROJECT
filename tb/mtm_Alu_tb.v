@@ -124,22 +124,6 @@ module mtm_Alu_tb (
 		else begin
 			$display("FAIL");
 		end
-
-		$display("Send valid data with crc error");
-		A = 3;
-		B = 7;
-		CTL_f = 8'b01000000;
-		//$display("1");
-		send_calculation_data({CTL_f,B,A});
-		//$display("CTL: %b", out[52:45]);
-		#15000 done = {out[52:45]} == 8'b10100101; 
-		//$display("CTL1: %b", out[52:45]);
-		if(done) begin
-			$display("PASS");
-		end
-		else begin
-			$display("FAIL");
-		end
 		
 		$display("Send invalid data (wrong number of DATA packets before CTL packet)");
 		send_byte(8'b01010101,0);
@@ -214,7 +198,22 @@ module mtm_Alu_tb (
 		else begin
 			$display("FAIL");
 		end
-
+		
+		$display("Send valid data with crc error");
+		A = 3;
+		B = 7;
+		CTL_f = 8'b01000000;
+		//$display("1");
+		#10000 send_calculation_data({CTL_f,B,A});
+		//$display("CTL: %b", out[52:45]);
+		#15000 done = {out[52:45]} == 8'b10100101; 
+		//$display("CTL1: %b", out[52:45]);
+		if(done) begin
+			$display("PASS");
+		end
+		else begin
+			$display("FAIL");
+		end
 	/*	$display("Send valid data");
 		A = 32'b10001010001001010000110000010100;
 		B = 32'b10001100100110111110001000011001;
@@ -261,7 +260,7 @@ module mtm_Alu_tb (
 	always @(posedge clk) begin
 		out = out_nxt;
 		k = iter;
-		//$display("OUT: %b",out);
+	//	$display("OUT: %b",out);
 		//$display("sout: %b", sout);
 	end
 

@@ -14,6 +14,7 @@ module mtm_Alu_deserializer (
 	reg [3:0] packet_counter;
 	reg [1:0] error_data;
 	reg [1:0] error;
+	reg [1:0] stop;
 	reg [31:0] A_nxt;
 	reg [31:0] B_nxt;
 
@@ -22,6 +23,7 @@ module mtm_Alu_deserializer (
 		packet_counter =0;
 		error_data =0;
 		error =0;
+		stop = 0;
 		data_a = 11'b11111111111;
 		data_b = 11'b11111111111;
 		data_ctl = 11'b11111111111;
@@ -36,6 +38,7 @@ module mtm_Alu_deserializer (
 			packet_counter =0;
 			error_data = 0;
 			error = 0;
+			stop = 0;
 			data_a = 11'b11111111111;
 			data_b = 11'b11111111111;
 			data_ctl = 11'b11111111111;
@@ -64,6 +67,25 @@ module mtm_Alu_deserializer (
 				//	$display("3");
 				end
 				
+			end
+			else if(stop == 1) begin
+				if(bit_counter >0) begin
+					bit_counter = bit_counter -1;
+				end
+				else begin
+					CTL = 8'b11111111;
+					stop = 0;
+					bit_counter = 11;
+					packet_counter = 0;
+					data_a = 11'b11111111111;
+					data_b = 11'b11111111111;
+					data_ctl = 11'b11111111111;
+					A_nxt= 32'b11111111111111111111111111111111;
+					B_nxt = 32'b11111111111111111111111111111111;
+					CTL = 8'b11111111;
+					A= 32'b11111111111111111111111111111111;
+					B = 32'b11111111111111111111111111111111;
+				end
 			end
 			else if(bit_counter == 0 && sin ==1) begin
 				error_data=1;
@@ -109,6 +131,8 @@ module mtm_Alu_deserializer (
 						A = A_nxt;
 						B = B_nxt;
 						CTL = data_ctl[8:1];
+						stop = 1;
+						bit_counter =1;
 					end
 					else begin
 					//	$display("CTL_DES: %b", CTL);
@@ -125,9 +149,6 @@ module mtm_Alu_deserializer (
 				CTL = 8'b11001001;
 				error= 1;
 				error_data =0;
-				data_a = 11'b11111111111;
-				data_b = 11'b11111111111;
-				data_ctl = 11'b11111111111;
 				
 			end
 		

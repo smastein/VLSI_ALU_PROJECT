@@ -1,5 +1,5 @@
 xrun: 18.09-s011: (c) Copyright 1995-2019 Cadence Design Systems, Inc.
-TOOL:	xrun	18.09-s011: Started on Sep 03, 2019 at 17:21:45 CEST
+TOOL:	xrun	18.09-s011: Started on Sep 03, 2019 at 17:41:50 CEST
 xrun
 	-F mtm_Alu.f
 		../tb/mtm_Alu_test_top.v
@@ -25,9 +25,9 @@ xrun: *W,DLCVAR (/home/student/kwarchol/cds.lib,1): cds.lib Invalid environment 
 INCLUDE $PDK_DIR/cds.lib
 |
 xrun: *W,DLCVAR (/home/student/kwarchol/cds.lib,1): cds.lib Invalid environment variable ''.
-Recompiling... reason: file '../tb/mtm_Alu_tb.v' is newer than expected.
-	expected: Tue Sep  3 17:21:10 2019
-	actual:   Tue Sep  3 17:21:41 2019
+Recompiling... reason: file '../rtl/mtm_Alu_deserializer.v' is newer than expected.
+	expected: Tue Sep  3 17:40:16 2019
+	actual:   Tue Sep  3 17:41:47 2019
 INCLUDE $PDK_DIR/cds.lib
 |
 xrun: *W,DLCVAR (/home/student/kwarchol/cds.lib,1): cds.lib Invalid environment variable ''.
@@ -36,6 +36,9 @@ INCLUDE $PDK_DIR/cds.lib
 xmvlog: *W,DLCVAR (/home/student/kwarchol/cds.lib,1): cds.lib Invalid environment variable ''.
 file: ./../tb/mtm_Alu_tb.v
 	module worklib.mtm_Alu_tb:v
+		errors: 0, warnings: 0
+file: ./../rtl/mtm_Alu_deserializer.v
+	module rtl.mtm_Alu_deserializer:v
 		errors: 0, warnings: 0
 	Total errors/warnings found outside modules and primitives:
 		errors: 0, warnings: 1
@@ -58,14 +61,16 @@ xmelab: *W,DLCVAR (/home/student/kwarchol/cds.lib,1): cds.lib Invalid environmen
 INCLUDE $PDK_DIR/cds.lib
 |
 xmvlog_cg: *W,DLCVAR (/home/student/kwarchol/cds.lib,1): cds.lib Invalid environment variable ''.
-		worklib.mtm_Alu_tb:v <0x573a8cff>
-			streams:  13, words: 37933
+		rtl.mtm_Alu_deserializer:v <0x683bd9df>
+			streams:   3, words: 14000
+		worklib.mtm_Alu_tb:v <0x3b600fdc>
+			streams:  13, words: 38025
 	Building instance specific data structures.
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
 		                 Instances  Unique
 		Modules:                 6       6
-		Registers:              78      78
+		Registers:              79      79
 		Scalar wires:            4       -
 		Vectored wires:          7       -
 		Always blocks:           6       6
@@ -83,13 +88,13 @@ xcelium> source /cad/XCELIUM1809/tools/xcelium/files/xmsimrc
 xcelium> run
 Send 1000 random valid data
 PASS
-Send valid data with crc error
-FAIL
 Send invalid data (wrong number of DATA packets before CTL packet)
 PASS
 Send max (0xFFFF) and min (0) data with all the ALU operations (AND OR, ADD,SUB)
 PASS
-Simulation complete via $finish(1) at time 41985802 NS + 0
-../tb/mtm_Alu_tb.v:240 		$finish;
+Send valid data with crc error
+PASS
+Simulation complete via $finish(1) at time 41995802 NS + 0
+../tb/mtm_Alu_tb.v:239 		$finish;
 xcelium> exit
-TOOL:	xrun	18.09-s011: Exiting on Sep 03, 2019 at 17:21:54 CEST  (total: 00:00:09)
+TOOL:	xrun	18.09-s011: Exiting on Sep 03, 2019 at 17:42:00 CEST  (total: 00:00:10)
