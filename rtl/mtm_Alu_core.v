@@ -2,9 +2,9 @@ module mtm_Alu_core (
     input wire clk,
     input wire rst_n,
     input wire [31:0] A,
-	input wire [31:0] B,
-	input wire [7:0] CTL_in,
-	output reg [31:0] C,
+    input wire [31:0] B,
+    input wire [7:0] CTL_in,
+    output reg [31:0] C,
     output reg [7:0] CTL_out
 ) ;
 
@@ -15,7 +15,6 @@ wire [3:0] CRC;
 assign OP = CTL_in[6:4];
 assign CRC = CTL_in[3:0];
 
-//reg [31:0] C_nxt;
 reg Carry,
 	Overflow, 
 	Zero, 
@@ -28,11 +27,12 @@ localparam 	AND = 3'b000,
 
 			
 initial begin
-  //C_nxt = 32'b11111111111111111111111111111111;
   Carry = 0; 
   Overflow = 0; 
   Zero = 0; 
   Negative = 0;
+  C = 0;
+  CTL_out = 8'b11111111;
 end
 
 always @(posedge clk) begin
@@ -42,7 +42,6 @@ always @(posedge clk) begin
 		Zero = 0; 
 		Negative = 0;
 		CTL_out = 8'b11111111;
-		//C_nxt = 32'b11111111111111111111111111111111;
 		C = 0;
 	end
 	else begin
@@ -81,7 +80,6 @@ always @(posedge clk) begin
 				end
 				default: begin
 					CTL_out = 8'b10010011;
-					//C = 32'b11111111111111111111111111111111;
 				end
 			endcase
 			
@@ -100,8 +98,6 @@ always @(posedge clk) begin
 			
 			
 		end
-		//$display("C: %b", C);
-		
 	end
 end
 	////////////////////////////////////////////////////////////////////////////////
