@@ -1,0 +1,69 @@
+if {![namespace exists ::IMEX]} { namespace eval ::IMEX {} }
+set ::IMEX::dataVar [file dirname [file normalize [info script]]]
+set ::IMEX::libVar ${::IMEX::dataVar}/libs
+
+catch { setDesignMode -process 180 }
+catch { setAnalysisMode -analysisType onChipVariation }
+catch { setAnalysisMode -asyncChecks async }
+catch { setAnalysisMode -checkType setup }
+catch { setAnalysisMode -clkSrcPath true }
+catch { setAnalysisMode -clockPropagation sdcControl }
+catch { setAnalysisMode -cppr both }
+catch { setAnalysisMode -skew true }
+catch { setAnalysisMode -usefulSkew true }
+catch { setOptMode -activeHoldViews { BC_av  } }
+catch { setOptMode -activeSetupViews { WC_av } }
+catch { setOptMode -autoHoldViews { BC_av } }
+catch { setOptMode -autoSetupViews { WC_av} }
+catch { setOptMode -autoTDGRSetupViews { WC_av} }
+catch { setOptMode -autoViewHoldTargetSlack 0 }
+catch { setOptMode -deleteInst true }
+catch { setOptMode -drcMargin 0 }
+catch { setOptMode -effort high }
+catch { setOptMode -fixDrc true }
+catch { setOptMode -optimizeFF true }
+catch { setOptMode -postRouteDrvRecovery true }
+catch { setOptMode -preserveAllSequential false }
+catch { setOptMode -setupTargetSlack 0 }
+setExtractRCMode  -layerIndependent 1 -lefTechFileMap /cad/dk/umc180/SUS/lefdef.layermap -effortLevel signoff -engine postRoute -total_c_th 5 -relative_c_th 0.03 -coupling_c_th 3
+catch {setNanoRouteMode -quiet -drouteAntennaFactor 1.000000}
+catch {setNanoRouteMode -quiet -droutePostRouteSpreadWire "auto"}
+catch {setNanoRouteMode -quiet -droutePostRouteSwapVia "multiCut"}
+catch {setNanoRouteMode -quiet -drouteStartIteration 0}
+catch {setNanoRouteMode -quiet -drouteUseLefPinTaperRule true}
+catch {setNanoRouteMode -quiet -drouteUseMinSpacingForBlockage auto}
+catch {setNanoRouteMode -quiet -extractRcModelFile "${::IMEX::libVar}/misc/rc_model.bin"}
+catch {setNanoRouteMode -quiet -extractThirdPartyCompatible false}
+catch {setNanoRouteMode -quiet -grouteExpCurrentTimingReport "/tmp/innovus_temp_357919_cadence212_pherian_8GAjZP/nanoroute_tmp_hupmVh/.timing_report1.d"}
+catch {setNanoRouteMode -quiet -grouteExpTdStdDelay 75.300000}
+catch {setNanoRouteMode -quiet -routeFillerInstPrefix "FILLER"}
+catch {setNanoRouteMode -quiet -routeReInsertFillerCellList "UCL_CAP9 UCL_CAP8 UCL_CAP7 UCL_CAP6 UCL_CAP5 UCL_FILL"}
+catch {setNanoRouteMode -quiet -routeReInsertFillerCellListFromFile false}
+catch {setNanoRouteMode -quiet -routeStrictlyHonorNonDefaultRule "false"}
+catch {setNanoRouteMode -quiet -routeTopRoutingLayer 3}
+catch {setNanoRouteMode -quiet -routeWithSiDriven false}
+catch {setNanoRouteMode -quiet -routeWithSiPostRouteFix false}
+catch {setNanoRouteMode -quiet -routeWithTimingDriven true}
+catch {setNanoRouteMode -quiet -routeWithViaInPin "1:1"}
+catch {setNanoRouteMode -quiet -routeWithViaOnlyForStandardCellPin "1:1"}
+
+catch { setPlaceMode -place_global_reorder_scan false }
+catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepFlatten true }
+catch { setUsefulSkewMode -ecoRoute false }
+catch { setDelayCalMode -enable_high_fanout true }
+catch { setDelayCalMode -eng_copyNetPropToNewNet true }
+catch { setDelayCalMode -engine aae }
+catch { setDelayCalMode -ignoreNetLoad false }
+catch { setDelayCalMode -SIAware true }
+catch { setTrialRouteMode -handlePreroute true }
+catch { setTrialRouteMode -keepMarkedOptRoutes true }
+catch { setHierMode -disableArt false }
+catch { setHierMode -reportPostRouteArtTiming false }
+catch { setHierMode -trialRouteHonorReadOnly false }
+catch { setImportMode -keepEmptyModule true }
+catch { setTieHiLoMode -cell {UCL_TIEHI} }
+catch { setSignoffOptMode -loadEcoOptDb ecoTimingDB }
+catch { setSIMode -separate_delta_delay_on_data true }
+catch { setRouteMode -earlyGlobalRouteSecondPG false }
+catch { setFillerMode -core {UCL_CAP9 UCL_CAP8 UCL_CAP7 UCL_CAP6 UCL_CAP5 UCL_FILL} }
+catch { setFillerMode -corePrefix FILLER }

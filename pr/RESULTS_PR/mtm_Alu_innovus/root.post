@@ -1,0 +1,34 @@
+
+::db::check_and_set_root_attr extract_rc_engine {post_route}
+::db::check_and_set_root_attr add_fillers_cells {UCL_CAP9 UCL_CAP8 UCL_CAP7 UCL_CAP6 UCL_CAP5 UCL_FILL}
+::db::check_and_set_root_attr add_fillers_prefix {FILLER}
+::db::check_and_set_root_attr add_tieoffs_cells {{UCL_TIEHI}}
+::db::check_and_set_root_attr delaycal_enable_high_fanout {true}
+::db::check_and_set_root_attr delaycal_eng_copyNetPropToNewNet {true}
+::db::check_and_set_root_attr delaycal_ignore_net_load {false}
+::db::check_and_set_root_attr extract_rc_coupled {true}
+::db::check_and_set_root_attr extract_rc_layer_independent {1}
+::db::check_and_set_root_attr extract_rc_lef_tech_file_map [list ${::IMEX::libVar}/misc/lefdef.layermap]
+::db::check_and_set_root_attr extract_rc_model_file [list ${::IMEX::libVar}/misc/rc_model.bin]
+::db::check_and_set_root_attr opt_delete_insts {true}
+::db::check_and_set_root_attr opt_drv_margin {0.0}
+::db::check_and_set_root_attr opt_effort {high}
+::db::check_and_set_root_attr opt_fix_drv {true}
+::db::check_and_set_root_attr opt_hier_trial_route_honor_read_only {false}
+::db::check_and_set_root_attr opt_post_route_drv_recovery {true}
+::db::check_and_set_root_attr opt_preserve_all_sequential {false}
+::db::check_and_set_root_attr opt_resize_flip_flops {true}
+::db::check_and_set_root_attr opt_setup_target_slack {0.0}
+::db::check_and_set_root_attr opt_signoff_read_eco_opt_db {ecoTimingDB}
+::db::check_and_set_root_attr opt_useful_skew_eco_route {false}
+::db::check_and_set_root_attr place_global_reorder_scan {false}
+::db::check_and_set_root_attr route_design_detail_post_route_spread_wire {auto}
+::db::check_and_set_root_attr route_design_detail_post_route_swap_via {multiCut}
+::db::check_and_set_root_attr route_design_detail_use_lef_pin_taper_rule {true}
+::db::check_and_set_root_attr route_design_strict_honor_route_rule {false}
+::db::check_and_set_root_attr route_design_top_routing_layer {3}
+::db::check_and_set_root_attr route_design_with_si_driven {false}
+::db::check_and_set_root_attr route_design_with_timing_driven {true}
+::db::check_and_set_root_attr route_design_with_via_in_pin {1:1}
+::db::check_and_set_root_attr route_design_with_via_only_for_lib_cell_pin {1:1}
+::db::check_and_set_root_attr route_early_global_secondary_pg {false}
