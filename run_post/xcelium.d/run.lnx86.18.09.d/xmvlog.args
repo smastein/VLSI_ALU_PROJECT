@@ -1,0 +1,23 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-XLMODE
+./xcelium.d/run.lnx86.18.09.d
+-RUNMODE
+./../tb/mtm_Alu_test_top.v
+./../tb/mtm_Alu_tb.v
+-LIBEXT
+.v
+-VFILE
+/cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v
+../pr/RESULTS_PR/mtm_Alu.noPower.v.gz
+-CDSLIB
+./xcelium.d/run.lnx86.18.09.d/cdsrun.lib
+-HDLVAR
+./xcelium.d/run.lnx86.18.09.d/hdlrun.var
+-MESSAGES
+-UPDATE
+-XLLIBSTORE
+./xcelium.d/run.lnx86.18.09.d/xllibs
+-ALLOWUNBOUND

@@ -1,0 +1,5 @@
+//
+// File created by:  xrun
+// Do not modify this file
+
+s1::(08Sep2019:23:28:09):( xrun -F mtm_Alu_post.f +access+r +neg_check -maxdelays +sdf_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X +xmsdf_cmd_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdfcmd -xminitialize rand_2state:56 ../pr/RESULTS_PR/mtm_Alu.noPower.v.gz -tcl -input tcl/dumptcf.tcl -gui )

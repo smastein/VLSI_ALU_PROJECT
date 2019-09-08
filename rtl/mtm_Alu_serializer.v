@@ -20,22 +20,18 @@ module mtm_Alu_serializer(
   reg [31:0] C_nxt;
   reg [7:0] CTL_nxt;
 
-  initial begin
-    state = IDLE;
-    bit_counter = 0;
-    packet_counter = 0;
-  end
 
 always @(posedge clk) begin
     if (!rst_n) begin
       state = IDLE;
       bit_counter = 0;
-      packet_counter = 5;
+      packet_counter = 0;
       CTL_nxt = 0;
       C_nxt = 0;
-      sout = 1;
     end
     else begin
+	//$display("ctl_in_ser: %b", CTL_out);
+	//$display("C_in_ser: %b", C);
       case(state)
         IDLE: begin
 	  if (CTL_out[7] == 0) begin
@@ -102,6 +98,7 @@ always @(posedge clk) begin
           	state = FIRST_BIT;
           end
       endcase
+	//$display("sout_ser: %b", sout);
     end
   end
 

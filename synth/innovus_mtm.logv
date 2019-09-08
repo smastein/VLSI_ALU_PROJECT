@@ -1,0 +1,64 @@
+[09/08 11:46:26      0s] 
+[09/08 11:46:26      0s] Cadence Innovus(TM) Implementation System.
+[09/08 11:46:26      0s] Copyright 2017 Cadence Design Systems, Inc. All rights reserved worldwide.
+[09/08 11:46:26      0s] 
+[09/08 11:46:26      0s] Version:	v17.13-s098_1, built Thu Feb 8 11:26:22 PST 2018
+[09/08 11:46:26      0s] Options:	-stylus -log innovus_mtm -overwrite 
+[09/08 11:46:26      0s] Date:		Sun Sep  8 11:46:26 2019
+[09/08 11:46:26      0s] Host:		cadence212 (x86_64 w/Linux 2.6.32-754.6.3.el6.x86_64) (16cores*64cpus*Intel(R) Xeon(R) Gold 6130 CPU @ 2.10GHz 22528KB)
+[09/08 11:46:26      0s] OS:		CentOS release 6.10 (Final)
+[09/08 11:46:26      0s] 
+[09/08 11:46:26      0s] License:
+[09/08 11:46:26      0s] 		invs	Innovus Implementation System	17.1	checkout succeeded
+[09/08 11:46:26      0s] 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
+[09/08 11:46:29      3s] 
+[09/08 11:46:29      3s] ***************************************************************************************
+[09/08 11:46:29      3s] INFO:    You have enabled the Common UI that has been internally qualified at Cadence but
+[09/08 11:46:29      3s]          has only limited customer testing. You are encouraged to work with Cadence directly
+[09/08 11:46:29      3s]          to qualify your usage and make sure it meets your needs before deploying it widely.
+[09/08 11:46:29      3s] ***************************************************************************************
+[09/08 11:46:29      3s] 
+[09/08 11:46:35      9s] @(#)CDS: Innovus v17.13-s098_1 (64bit) 02/08/2018 11:26 (Linux 2.6.18-194.el5)
+[09/08 11:46:35      9s] @(#)CDS: NanoRoute 17.13-s098_1 NR180117-1602/17_13-UB (database version 2.30, 414.7.1) {superthreading v1.44}
+[09/08 11:46:35      9s] @(#)CDS: AAE 17.13-s036 (64bit) 02/08/2018 (Linux 2.6.18-194.el5)
+[09/08 11:46:35      9s] @(#)CDS: CTE 17.13-s031_1 () Feb  1 2018 09:16:44 ( )
+[09/08 11:46:35      9s] @(#)CDS: SYNTECH 17.13-s011_1 () Jan 14 2018 01:24:42 ( )
+[09/08 11:46:35      9s] @(#)CDS: CPE v17.13-s062
+[09/08 11:46:35      9s] @(#)CDS: IQRC/TQRC 16.1.1-s220 (64bit) Fri Aug  4 09:53:48 PDT 2017 (Linux 2.6.18-194.el5)
+[09/08 11:46:35      9s] @(#)CDS: OA 22.50-p063 Fri Feb  3 19:45:13 2017
+[09/08 11:46:35      9s] @(#)CDS: SGN 10.10-p124 (19-Aug-2014) (64 bit executable)
+[09/08 11:46:35      9s] @(#)CDS: RCDB 11.10
+[09/08 11:46:35      9s] --- Running on cadence212 (x86_64 w/Linux 2.6.32-754.6.3.el6.x86_64) (16cores*64cpus*Intel(R) Xeon(R) Gold 6130 CPU @ 2.10GHz 22528KB) ---
+[09/08 11:46:35      9s] Create and set the environment variable TMPDIR to /tmp/innovus_temp_390653_cadence212_pherian_59txbv.
+
+[09/08 11:46:35      9s] Create and set the environment variable TMPDIR to /tmp/innovus_temp_390653_cadence212_pherian_59txbv.
+[09/08 11:46:35      9s] 
+[09/08 11:46:35      9s] Change the soft stacksize limit to 0.2%RAM (515 mbytes). Set global soft_stack_size_limit to change the value.
+[09/08 11:46:36     10s] 
+[09/08 11:46:36     10s] **INFO:  MMMC transition support version v31-84 
+[09/08 11:46:36     10s] 
+[09/08 11:46:37     11s] @innovus 1> source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl
+#@ Begin verbose source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl
+[09/08 11:47:13     14s] @file(run_pr.tcl) 1: source tcl/01_initialize_design.tcl
+[09/08 11:47:13     14s] **ERROR: (IMPSE-122):	The file 'tcl/01_initialize_design.tcl' referenced in file '/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl' could not be located using the current 'script_search_path' setting of "". You need to provide a corrected search path or file reference and rerun the script.
+[09/08 11:47:13     14s] **ERROR: (IMPSE-110):	File '/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl' line 141: errors out.
+[09/08 11:47:13     14s] #@ End verbose source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl
+[09/08 11:47:13     14s] 
+[09/08 11:47:13     14s] @innovus 2> source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl
+#@ Begin verbose source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl
+[09/08 11:48:36     20s] @file(01_initialize_design.tcl) 6: source tcl/00_common_settings.tcl
+[09/08 11:48:36     20s] **ERROR: (IMPSE-122):	The file 'tcl/00_common_settings.tcl' referenced in file '/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl' could not be located using the current 'script_search_path' setting of "". You need to provide a corrected search path or file reference and rerun the script.
+[09/08 11:48:36     20s] **ERROR: (IMPSE-110):	File '/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl' line 146: errors out.
+[09/08 11:48:36     20s] #@ End verbose source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl
+[09/08 11:48:36     20s] 
+[09/08 11:48:36     20s] @innovus 3> exit
+
+[09/08 11:49:17     24s] *** Memory Usage v#1 (Current mem = 560.336M, initial mem = 242.371M) ***
+[09/08 11:49:17     24s] 
+[09/08 11:49:17     24s] *** Summary of all messages that are not suppressed in this session:
+[09/08 11:49:17     24s] Severity  ID               Count  Summary                                  
+[09/08 11:49:17     24s] ERROR     IMPSE-110            2  File '%s' line %s: %s.                   
+[09/08 11:49:17     24s] ERROR     IMPSE-122            2  The file '%s' referenced in file '%s' co...
+[09/08 11:49:17     24s] *** Message Summary: 0 warning(s), 4 error(s)
+[09/08 11:49:17     24s] 
+[09/08 11:49:17     24s] --- Ending "Innovus" (totcpu=0:00:24.3, real=0:02:51, mem=560.3M) ---

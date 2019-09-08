@@ -1,0 +1,3 @@
+define LIB_MAP ( $LIB_MAP \
+, ../../../../../../../../../../cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v => UCLLIB_AGH \
+)

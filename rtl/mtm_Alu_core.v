@@ -25,15 +25,6 @@ localparam 	AND = 3'b000,
 			ADD = 3'b100,
 			SUB = 3'b101;
 
-			
-initial begin
-  Carry = 0; 
-  Overflow = 0; 
-  Zero = 0; 
-  Negative = 0;
-  C = 0;
-  CTL_out = 8'b11111111;
-end
 
 always @(posedge clk) begin
 	if (!rst_n) begin
@@ -46,8 +37,7 @@ always @(posedge clk) begin
 	end
 	else begin
 		if(CTL_in[7] == 0) begin
-			
-			#1case(OP)
+			case(OP)
 				AND: begin						//CTL( {1'b0, FLAGS, CRC)
 					C = A & B;					//FLAGS = { Carry, Overflow, Zero, Negative } - 4 bits of ALU flags
 					Carry = 0; 
@@ -98,6 +88,7 @@ always @(posedge clk) begin
 			
 			
 		end
+		//$display("ctl_out_core: %b", CTL_out);
 	end
 end
 	////////////////////////////////////////////////////////////////////////////////

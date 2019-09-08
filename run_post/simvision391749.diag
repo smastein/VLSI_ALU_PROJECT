@@ -1,0 +1,91 @@
+*** Message Type: info ***
+When: Sun Sep 08 16:06:03 CEST 2019
+SimVision started.
+Version: TOOL:  simvision       18.09-s011
+User: pherian
+Host: localhost
+Platform: Linux/x86_64/2.6.32-754.6.3.el6.x86_64
+Started: Sun Sep 08 16:06:03 CEST 2019
+Command: /cad/XCELIUM1809/tools.lnx86/simvision/bin/simvision.exe -connect dc:localhost:60727 -nocopyright
+Work Directory: /home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post
+ 
+*** Message Type: info ***
+When: Sun Sep 08 16:06:04 CEST 2019
+Create browser window: "Design Browser 1"
+ 
+*** Message Type: info ***
+When: Sun Sep 08 16:06:06 CEST 2019
+Create console window: "Console"
+ 
+*** Message Type: info ***
+When: Sun Sep 08 16:06:08 CEST 2019
+Connect to Simulator
+      Design: worklib.mtm_Alu_test_top:v
+   Languages: verilog
+   Simulator: XM-Sim
+     Version: TOOL: xmsim   18.09-s011
+        User: pherian
+        Host: localhost
+Time Started: Sun Sep 08 16:06:02 CEST 2019
+  Process ID: 391013
+   Directory: /home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post
+     Command: xrun -F mtm_Alu_post.f +access+r +neg_check -maxdelays +sdf_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X +xmsdf_cmd_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdfcmd -xminitialize rand_2state:56 ../pr/RESULTS_PR/mtm_Alu.noPower.v.gz -tcl -input tcl/dumptcf.tcl -gui
+
+ 
+*** Message Type: info ***
+When: Sun Sep 08 16:06:08 CEST 2019
+Create utility window: "Properties"
+ 
+*** Message Type: info ***
+When: Sun Sep 08 16:07:03 CEST 2019
+Delete browser window: "Design Browser 1"
+ 
+*** Message Type: info ***
+When: Sun Sep 08 16:50:42 CEST 2019
+Exit XM-Sim: user
+      Design: worklib.mtm_Alu_test_top:v
+   Languages: verilog
+   Simulator: XM-Sim
+     Version: TOOL: xmsim   18.09-s011
+        User: pherian
+        Host: localhost
+Time Started: Sun Sep 08 16:06:02 CEST 2019
+  Process ID: 391013
+   Directory: /home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post
+     Command: xrun -F mtm_Alu_post.f +access+r +neg_check -maxdelays +sdf_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X +xmsdf_cmd_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdfcmd -xminitialize rand_2state:56 ../pr/RESULTS_PR/mtm_Alu.noPower.v.gz -tcl -input tcl/dumptcf.tcl -gui
+
+ 
+*** Message Type: error ***
+When: Sun Sep 08 16:50:42 CEST 2019
+XM-Sim Crashed:
+      Design: worklib.mtm_Alu_test_top:v
+   Languages: verilog
+   Simulator: XM-Sim
+     Version: TOOL: xmsim   18.09-s011
+        User: pherian
+        Host: localhost
+Time Started: Sun Sep 08 16:06:02 CEST 2019
+  Process ID: 391013
+   Directory: /home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post
+     Command: xrun -F mtm_Alu_post.f +access+r +neg_check -maxdelays +sdf_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X +xmsdf_cmd_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdfcmd -xminitialize rand_2state:56 ../pr/RESULTS_PR/mtm_Alu.noPower.v.gz -tcl -input tcl/dumptcf.tcl -gui
+      Design: worklib.mtm_Alu_test_top:v
+   Languages: verilog
+   Simulator: XM-Sim
+     Version: TOOL:        xmsim   18.09-s011
+        User: pherian
+        Host: localhost
+Time Started: Sun Sep 08 16:06:02 CEST 2019
+  Process ID: 391013
+   Directory: /home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post
+     Command: xrun -F mtm_Alu_post.f +access+r +neg_check -maxdelays +sdf_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X +xmsdf_cmd_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdfcmd -xminitialize rand_2state:56 ../pr/RESULTS_PR/mtm_Alu.noPower.v.gz -tcl -input tcl/dumptcf.tcl -gui
+
+Outstanding STRAP Requests:
+        strap::reinvoke savestate /home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/.simvision/391749_pherian__autosave.tcl {# XM-Sim Command File
+# TOOL:        xmsim   18.09-s011
+#
+} {simvision -input /home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/.simvision/391749_pherian__autosave.tcl.svcf}
+ 
+*** Message Type: info ***
+When: Sun Sep 08 16:50:50 CEST 2019
+SimVision Exit.
+ 

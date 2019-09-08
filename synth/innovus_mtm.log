@@ -1,0 +1,46 @@
+
+Cadence Innovus(TM) Implementation System.
+Copyright 2017 Cadence Design Systems, Inc. All rights reserved worldwide.
+
+Version:	v17.13-s098_1, built Thu Feb 8 11:26:22 PST 2018
+Options:	-stylus -log innovus_mtm -overwrite 
+Date:		Sun Sep  8 11:46:26 2019
+Host:		cadence212 (x86_64 w/Linux 2.6.32-754.6.3.el6.x86_64) (16cores*64cpus*Intel(R) Xeon(R) Gold 6130 CPU @ 2.10GHz 22528KB)
+OS:		CentOS release 6.10 (Final)
+
+License:
+		invs	Innovus Implementation System	17.1	checkout succeeded
+		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
+
+***************************************************************************************
+INFO:    You have enabled the Common UI that has been internally qualified at Cadence but
+         has only limited customer testing. You are encouraged to work with Cadence directly
+         to qualify your usage and make sure it meets your needs before deploying it widely.
+***************************************************************************************
+
+Create and set the environment variable TMPDIR to /tmp/innovus_temp_390653_cadence212_pherian_59txbv.
+
+Change the soft stacksize limit to 0.2%RAM (515 mbytes). Set global soft_stack_size_limit to change the value.
+
+**INFO:  MMMC transition support version v31-84 
+
+@innovus 1> source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl
+#@ Begin verbose source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl
+@file(run_pr.tcl) 1: source tcl/01_initialize_design.tcl
+**ERROR: (IMPSE-122):	The file 'tcl/01_initialize_design.tcl' referenced in file '/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl' could not be located using the current 'script_search_path' setting of "". You need to provide a corrected search path or file reference and rerun the script.
+**ERROR: (IMPSE-110):	File '/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl' line 141: errors out.
+#@ End verbose source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/run_pr.tcl
+
+@innovus 2> source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl
+#@ Begin verbose source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl
+@file(01_initialize_design.tcl) 6: source tcl/00_common_settings.tcl
+**ERROR: (IMPSE-122):	The file 'tcl/00_common_settings.tcl' referenced in file '/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl' could not be located using the current 'script_search_path' setting of "". You need to provide a corrected search path or file reference and rerun the script.
+**ERROR: (IMPSE-110):	File '/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl' line 146: errors out.
+#@ End verbose source /student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/pr/tcl/01_initialize_design.tcl
+
+@innovus 3> exit
+
+*** Memory Usage v#1 (Current mem = 560.336M, initial mem = 242.371M) ***
+*** Message Summary: 0 warning(s), 4 error(s)
+
+--- Ending "Innovus" (totcpu=0:00:24.3, real=0:02:51, mem=560.3M) ---

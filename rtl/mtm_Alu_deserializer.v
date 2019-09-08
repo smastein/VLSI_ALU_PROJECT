@@ -18,19 +18,6 @@ module mtm_Alu_deserializer (
 	reg [31:0] A_nxt;
 	reg [31:0] B_nxt;
 
-	initial begin
-		bit_counter = 11;
-		packet_counter =0;
-		error_data =0;
-		error =0;
-		stop = 0;
-		data_a = 11'b11111111111;
-		data_b = 11'b11111111111;
-		data_ctl = 11'b11111111111;
-		A_nxt= 32'b11111111111111111111111111111111;
-		B_nxt = 32'b11111111111111111111111111111111;
-		
-	end
 	
 	always @ (posedge clk) begin
 		if (!rst) begin
@@ -48,7 +35,9 @@ module mtm_Alu_deserializer (
 		end 
 		else begin
 		if((!sin) || (bit_counter < 11)) begin
-
+		//$display("sin_des: %b", sin);
+		//$display("bit: %b", bit_counter);
+			
 			if(bit_counter == 11) begin
 				bit_counter = 0;
 			end
@@ -145,6 +134,7 @@ module mtm_Alu_deserializer (
 			
 		end
 		end
+	//$display("ctl_des: %b", CTL);
 end
 
 function [3:0] nextCRC4_D68;

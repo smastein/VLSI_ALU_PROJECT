@@ -57,6 +57,8 @@ module mtm_Alu_tb (
 			
 	initial begin
 		clk = 1; 
+		xx=0;
+		mm=0;
 		i = 0; 
 		j = 0; 
 		k = 1; 
@@ -65,10 +67,12 @@ module mtm_Alu_tb (
 		done =0;
 		pass =0;
 		iter = 1;
-		rst_n = 1;
 		OP_f = 3'b000;
 		CRC_f = 4'b0000;
 		CTL_f = 8'b00000000;
+		rst_n = 0;  
+  		#401 
+  		rst_n = 1;
 		
 		$display("Send 1000 random valid data");
 		while(count <1000) begin
@@ -84,7 +88,7 @@ module mtm_Alu_tb (
 			if(count%4 == 3) begin
 				OP_f = 3'b101;
 			end
-			#1000 count = count + 1;
+			#500 count = count + 1;
 			A = $urandom;
     			B = $urandom;
 	//$display("A: %b", A);
@@ -92,9 +96,15 @@ module mtm_Alu_tb (
     			CTL_f = {1'b0,OP_f,4'b0000};
     			CTL_f[3:0] = nextCRC4_D68({A,B,1'b1,OP_f},4'b0000);
     			send_calculation_data({CTL_f,B,A});
-    			#19000 done =compare({out[52:45],out[41:34],out[30:23],out[19:12],out[8:1]},A,B,CTL_f);
+    			#10000 done =compare({out[52:45],out[41:34],out[30:23],out[19:12],out[8:1]},A,B,CTL_f);
 			if(!done) begin
 				pass =1;
+				//$display("EEE: %d", e);
+				//$display("A: %b", A);
+				//$display("B: %b", B);
+				//$display("CTL: %b", CTL_f);
+				//$display("OUT: %b", out);
+				//e= e+1;
 			end
 		end
 		if(!pass) begin
@@ -108,7 +118,8 @@ module mtm_Alu_tb (
 		send_byte(8'b01010101,0);
 		send_byte(8'b00001111,0);
 		send_byte(8'b01010000,1);
-		#10000done = {out[52:45]} == 8'b11001001;
+		#5000 done = {out[52:45]} == 8'b11001001;
+		//$display("CTL : %b", out[52:45]);
 		if(done) begin
 			$display("PASS");
 		end
@@ -139,13 +150,13 @@ module mtm_Alu_tb (
 			CRC_f = nextCRC4_D68({Bm, Am, 1'b1, OP_f},4'b0000);
 			CTL_f = {1'b0, OP_f, CRC_f};
 			send_calculation_data({CTL_f,Bm,Am});
-			#20000 xx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,Bm,CTL_f);
+			#10000 xx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},Am,Bm,CTL_f);
 			
 			//2
 			CRC_f = nextCRC4_D68({B, A, 1'b1, OP_f},4'b0000);
 			CTL_f = {1'b0, OP_f, CRC_f};
 			send_calculation_data({CTL_f,B,A});
-			#20000 mm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f);
+			#10000 mm = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,B,CTL_f);
 			
 		/*	//3
 			CRC_f = nextCRC4_D68({B, Am, 1'b1, OP_f},4'b0000);
@@ -159,7 +170,7 @@ module mtm_Alu_tb (
 			send_calculation_data({CTL_f,Bm,A});
 			mx = compare({out[52:45],out[41:34],out[30:23],out[19:12], out[8:1]},A,Bm,CTL_f);*/
 			
-			if(xx == mm == 1) begin
+			if(xx == mm && xx == 1) begin
 				done =1;
 			end
 		end
@@ -174,10 +185,10 @@ module mtm_Alu_tb (
 		A = 3;
 		B = 7;
 		CTL_f = 8'b01000000;
-		#10000 send_calculation_data({CTL_f,B,A});
-		#15000 done = {out[52:45]} == 8'b10100101; 
+		#5000 send_calculation_data({CTL_f,B,A});
+		#7500 done = {out[52:45]} == 8'b10100101; 
 		if(done) begin
-			$display("PASS");
+			$display("PASS"); 
 		end
 		else begin
 			$display("FAIL");
@@ -204,6 +215,8 @@ module mtm_Alu_tb (
 	always @(posedge clk) begin
 		out = out_nxt;
 		k = iter;
+		//$display("out: %b", out);
+		//$display("sout: %b", sout);
 	end
 
 	always begin
@@ -214,25 +227,26 @@ module mtm_Alu_tb (
 		input [7:0] Data,
 		input [1:0] CMD_input ); //=0 - Data, =1 - CTL
 		begin
+			//$display("DATA_TB: %b", Data);
 			for(i=11; i>0; i= i-1) begin
 				@(posedge clk) begin
 					if(CMD_input ==0) begin
 						if(i==11 || i==10)
-							#2sin=0;
+							sin=0;
 						else if(i == 1)
-							#2sin = 1;
+							sin = 1;
 						else
-							#2sin=Data[i-2];
+							sin=Data[i-2];
 					end
 					if(CMD_input == 1) begin
 						if(i==11)
-							#2sin =0;
+							sin =0;
 						else if(i ==1 || i == 10)
-							#2sin = 1;
+							sin = 1;
 						else 
-							#2sin = Data[i-2];
+							sin = Data[i-2];
 					end
-
+					//$display("sin_tb: %b", sin);
 				end
 			end
 		end
@@ -300,12 +314,12 @@ module mtm_Alu_tb (
 					expected = A-B;
 				end
 			endcase
-		//display("exp: %b", expected); 
-		//	$display("A: %b", A);
-		//	$display("B: %b", B);
-		//	$display("expected: %b", expected);
-		//	$display("result: %b", result);
-		//	$display("result1: %b", result[39:8]);
+			//display("exp: %b", expected); 
+			//$display("A: %b", A);
+			//$display("B: %b", B);
+			//$display("expected: %b", expected);
+			//$display("result: %b", result);
+			//$display("result1: %b", result[39:8]);
 			compare=(expected == result[39:8]); // {CARRY, A+B}
 		end
 	endfunction

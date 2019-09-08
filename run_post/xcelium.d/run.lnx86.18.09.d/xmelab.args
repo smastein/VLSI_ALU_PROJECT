@@ -1,0 +1,30 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
++neg_check
++libext+.v
++access+r
++sdf_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X
++xmsdf_cmd_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdfcmd
+-timescale
+1ns/1ps
+-ACCESS
++r
+-MAXDELAYS
+-SDF_FILE
+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X
+-SDF_CMD_FILE
+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdfcmd
+-MESSAGES
+-XMINITIALIZE
+-XLMODE
+./xcelium.d/run.lnx86.18.09.d
+-RUNMODE
+-CDSLIB
+./xcelium.d/run.lnx86.18.09.d/cds.lib
+-HDLVAR
+./xcelium.d/run.lnx86.18.09.d/hdl.var
+-WORK
+worklib
+-HASXLMODE

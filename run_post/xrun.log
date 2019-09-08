@@ -1,0 +1,472 @@
+xrun: 18.09-s011: (c) Copyright 1995-2019 Cadence Design Systems, Inc.
+TOOL:	xrun	18.09-s011: Started on Sep 08, 2019 at 23:28:09 CEST
+xrun
+	-F mtm_Alu_post.f
+		../tb/mtm_Alu_test_top.v
+		../tb/mtm_Alu_tb.v
+		+libext+.v
+		-v /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v
+		-timescale 1ns/1ps
+	+access+r
+	+neg_check
+	-maxdelays
+	+sdf_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X
+	+xmsdf_cmd_file+/home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdfcmd
+	-xminitialize rand_2state:56
+	../pr/RESULTS_PR/mtm_Alu.noPower.v.gz
+	-tcl
+	-input tcl/dumptcf.tcl
+	-gui
+
+   User defined plus("+") options:
+	+neg_check
+
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xmvlog: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+file: ./../tb/mtm_Alu_test_top.v
+	module worklib.mtm_Alu_test_top:v
+		errors: 0, warnings: 0
+file: ./../tb/mtm_Alu_tb.v
+	module worklib.mtm_Alu_tb:v
+		errors: 0, warnings: 0
+file: ../pr/RESULTS_PR/mtm_Alu.noPower.v.gz
+	module worklib.add_unsigned_358:v
+		errors: 0, warnings: 0
+	module worklib.lt_unsigned_356:v
+		errors: 0, warnings: 0
+	module worklib.sub_unsigned_353:v
+		errors: 0, warnings: 0
+	module worklib.mtm_Alu_core:v
+		errors: 0, warnings: 0
+	module worklib.mtm_Alu_deserializer:v
+		errors: 0, warnings: 0
+	module worklib.mtm_Alu_serializer:v
+		errors: 0, warnings: 0
+	module worklib.mtm_Alu:v
+		errors: 0, warnings: 0
+file: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v
+	module UCLLIB_AGH.UCL_AND2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_AOI21:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_AOI22_2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_AON2B_2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_BUF:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_BUF4:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_BUF8_2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_CGI2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_DFF:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_DFF_RES:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_FA:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_INV:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_INV2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_INV4:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_MUX2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_MUX2A:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_MUX2B:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_NAND2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_NAND2A:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_NAND2_2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_NAND2_WIDEN:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_NAND3:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_NOR2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_NOR2_2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_NOR3:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_OAI21:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_OAI22:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_OR2:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_TIEHI:v
+		errors: 0, warnings: 0
+	module UCLLIB_AGH.UCL_XOR:v
+		errors: 0, warnings: 0
+	primitive UCLLIB_AGH.altos_dff_err:v
+		errors: 0, warnings: 0
+	primitive UCLLIB_AGH.altos_dff:v
+		errors: 0, warnings: 0
+	primitive UCLLIB_AGH.altos_dff_r_err:v
+		errors: 0, warnings: 0
+	primitive UCLLIB_AGH.altos_dff_r:v
+		errors: 0, warnings: 0
+	primitive UCLLIB_AGH.UDP_IMUX_21:v
+		errors: 0, warnings: 0
+	Total errors/warnings found outside modules and primitives:
+		errors: 0, warnings: 1
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xmelab: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+		Caching library 'UCLLIB_AGH' ....... Done
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		mtm_Alu_test_top
+	Annotating SDF timing data:
+		Compiled SDF file:     /home/student/pherian/PPCU_VLSI/TSMC130/VLSI_ALU_PROJECT/run_post/mtm_Alu.sdf.gz.X
+		Log file:              mtm_Alu_sdf.log
+		Backannotation scope:  mtm_Alu_test_top.DUT
+		Configuration file:    
+		MTM control:           TOOL_CONTROL
+		Scale factors:         
+		Scale type:            
+	Annotation completed successfully...
+	SDF statistics: No. of Pathdelays = 4484  Annotated = 100.00% -- No. of Tchecks = 1070  Annotated = 100.00% 
+				        Total 	   Annotated	  Percentage
+		 Path Delays	        4484	        4484	      100.00
+		      $width	         535	         535	      100.00
+		     $recrem	           1	           1	      100.00
+		  $setuphold	         534	         534	      100.00
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xmvlog_cg: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+		worklib.mtm_Alu_tb:v <0x10ea1395>
+			streams:  13, words: 37907
+		worklib.mtm_Alu_deserializer:v <0x79acef2a>
+			streams:   0, words:     0
+		worklib.mtm_Alu_core:v <0x19ba3302>
+			streams:   0, words:     0
+		UCLLIB_AGH.UCL_DFF_RES:v <0x7034ec47>
+			streams:   0, words:     0
+		UCLLIB_AGH.UCL_DFF:v <0x6b58ea45>
+			streams:   0, words:     0
+		UCLLIB_AGH.UCL_DFF:v <0x58459302>
+			streams:   0, words:     0
+		UCLLIB_AGH.UCL_DFF:v <0x5665130f>
+			streams:   0, words:     0
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                    Instances  Unique
+		Modules:                 1850      39
+		UDPs:                     599       5
+		Primitives:              4392       6
+		Timing outputs:          2164      12
+		Registers:                307      46
+		Scalar wires:            2438       -
+		Always blocks:              3       3
+		Initial blocks:             6       6
+		Timing checks:           1605     282
+		Interconnect:            4312      28
+		Delayed tcheck signals:   535     284
+		Simulation timescale:     1ps
+	Writing initial simulation snapshot: worklib.mtm_Alu_test_top:v
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xmsim: *W,DLCVAR (/home/student/pherian/cds.lib,1): cds.lib Invalid environment variable ''.
+SVSEED default: 1
+xmsim: *W,RNDXCELON: Xceligen, the new SystemVerilog constraint solver is used. Disabling Xceligen and using the legacy constraint solver is possible with "xrun/xmsim -xceligen on=0 ...".
+
+-------------------------------------
+Relinquished control to SimVision...
+xcelium> 
+xcelium> source /cad/XCELIUM1809/tools/xcelium/files/xmsimrc
+xcelium> # dump net switching activity into a file
+xcelium> # (to be used for dynamic power estimation)
+xcelium> dumptcf \
+>   -scope DUT \
+>   -overwrite \
+>   -dumpwireasnet \
+>   -output RESULTS/mtm_Alu.tcf
+xcelium> 
+xcelium> # run simulation
+xcelium> run
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:510 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[3] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:530 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[4] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:510 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[5] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[15] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:520 PS,  0.15 : 150 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[23] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[24] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:510 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[26] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:510 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[29] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:540 PS, negedge D:510 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[30] 
+            Time: 540 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, posedge D:410 PS,  0.15 : 150 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 378
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_deserializer.\bit_counter_reg[0] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:480 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\CTL_nxt_reg[3] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[8] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[9] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:530 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[10] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[11] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:530 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[12] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[13] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[14] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:520 PS,  0.15 : 150 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[16] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:530 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[18] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[19] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:530 PS,  0.16 : 160 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[27] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:550 PS, negedge D:520 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[28] 
+            Time: 550 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:500 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\CTL_nxt_reg[0] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:500 PS,  0.15 : 150 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\CTL_nxt_reg[1] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:500 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\CTL_nxt_reg[2] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:500 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\CTL_nxt_reg[4] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:500 PS,  0.15 : 150 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\CTL_nxt_reg[5] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:500 PS,  0.15 : 150 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\CTL_nxt_reg[6] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:510 PS,  0.16 : 160 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\CTL_nxt_reg[7] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:510 PS,  0.15 : 150 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[0] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:510 PS,  0.16 : 160 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[1] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:510 PS,  0.16 : 160 PS,  -0.01 : -10 PS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[2] 
+            Time: 560 PS
+
+
+Warning!  Timing violation
+           $setuphold<setup>( posedge CLK:560 PS, negedge D:490 PS,  0.15 : 150 PS,  0.00 : 0 FS );
+            File: /cad/dk/umc180/SUS/verilog/UCLLIB_AGH.v, line = 381
+           Scope: mtm_Alu_test_top.DUT.u_mtm_Alu_serializer.\C_nxt_reg[31] 
+            Time: 560 PS
+
+Send 1000 random valid data
+FAIL
+Send invalid data (wrong number of DATA packets before CTL packet)
+FAIL
+Send max (0xFFFF) and min (0) data with all the ALU operations (AND OR, ADD,SUB)
+FAIL
+Send valid data with crc error
+FAIL
+Simulation complete via $finish(1) at time 32296900 NS + 0
+../tb/mtm_Alu_tb.v:196 		$finish;
+xcelium> 
+xcelium> # finish
+xcelium> #exit
+xcelium> 
